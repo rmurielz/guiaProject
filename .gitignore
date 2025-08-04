@@ -1,0 +1,27 @@
+# Archivos de entorno virtual
+.venv/
+venv/
+ENV/
+
+# Archivos de base de datos
+db.sqlite3
+*.sqlite3
+
+# Archivos de Python compilados
+__pycache__/
+*.pyc
+
+# Archivos de configuración del IDE (PyCharm)
+.idea/
+
+# Archivos de media y estáticos generados por el usuario (si aplica)
+/media/
+
+# Archivos de entorno para variables sensibles
+.env
+
+# Logs
+*.log
+
+# Cobertura de tests
+.coverage
