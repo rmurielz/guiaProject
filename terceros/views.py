@@ -1,8 +1,8 @@
 # C:/proyecto/Guia/terceros/views.py
-from re import search
-
+import logging
 import requests
-from django.http import JsonResponse
+from typing import List, Dict, Any
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -11,7 +11,11 @@ from django.urls import reverse
 from .forms import TerceroForm
 from .models import Tercero
 
-def dashboard_view(request):
+# Obtenemos una instancia del logger para registrar eventos importantes, especialmente errores.
+logger = logging.getLogger(__name__)
+
+
+def dashboard_view(request: HttpRequest) -> HttpResponse:
     """
     Vista para la página de inicio/dashboard del ERP.
     Muestra estadísticas y accesos directos.
@@ -22,105 +26,125 @@ def dashboard_view(request):
     }
     return render(request, 'terceros/dashboard.html')
 
-def landing_page_view(request):
+
+def landing_page_view(request: HttpRequest) -> HttpResponse:
     return render(request, 'terceros/landing_page.html')
 
-# Vista para buscar países en GeoNames
-def buscar_paises_geonames(request):
+
+def _consultar_geonames(url: str) -> List[Dict[str, Any]]:
+    """
+    Función auxiliar centralizada para consultar la API de GeoNames.
+    Maneja timeouts, rate limits, y otros errores de red de forma robusta.
+    """
+    try:
+        response = requests.get(url, timeout=10)
+
+        # Manejar explícitamente el límite de peticiones (Rate Limit)
+        if response.status_code == 429:
+            logger.warning("Límite de peticiones a la API de GeoNames excedido. URL: %s", url)
+            # No devolvemos error al cliente, sino una lista vacía para no romper el frontend.
+            return []
+
+        # Lanza una excepción para otros códigos de error (4xx/5xx)
+        response.raise_for_status()
+
+        return response.json().get('geonames', [])
+
+    except requests.Timeout:
+        logger.error("Timeout al intentar conectar con la API de GeoNames. URL: %s", url)
+    except requests.RequestException as e:
+        logger.error("Error de red o HTTP al consultar GeoNames: %s. URL: %s", e, url)
+
+    # En caso de cualquier error, devolvemos una lista vacía para que el frontend no falle.
+    return []
+
+
+def buscar_paises_geonames(request: HttpRequest) -> JsonResponse:
     username = settings.GEONAMES_USERNAME
     search_term = request.GET.get('q', '').lower()
     url = f"http://api.geonames.org/countryInfoJSON?username={username}&lang=es"
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Lanza un error para respuestas 4xx/5xx
-        data = response.json().get('geonames', [])
-        # Formateamos los datos para nuestro frontend
-        paises = [
-            {'id': p['geonameId'], 'nombre': p['countryName'], 'codigo': p['countryCode']}
-            for p in data
-        ]
-        if search_term:
-            paises = [p for p in paises if search_term in p['nombre'].lower()]
+    data = _consultar_geonames(url)
+    paises = [
+        {'id': p['geonameId'], 'nombre': p['countryName'], 'codigo': p['countryCode']}
+        for p in data
+    ]
 
-        paises_ordenados = sorted(paises, key=lambda x: x['nombre'])
-        return JsonResponse(paises_ordenados[:20], safe=False)
-    except requests.RequestException as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    # El endpoint de países no permite filtrar por nombre en la API, así que lo hacemos aquí.
+    if search_term:
+        paises = [p for p in paises if search_term in p['nombre'].lower()]
 
-# Vista para buscar divisiones (estados/departamentos) de un país
-def buscar_divisiones_geonames(request):
+    paises_ordenados = sorted(paises, key=lambda x: x['nombre'])
+    return JsonResponse(paises_ordenados[:20], safe=False)
+
+
+def buscar_divisiones_geonames(request: HttpRequest) -> JsonResponse:
     pais_geoname_id = request.GET.get('geoname_id')
     search_term = request.GET.get('q', '').lower()
     if not pais_geoname_id:
         return JsonResponse([], safe=False)
 
     username = settings.GEONAMES_USERNAME
-    # Usamos featureCode=ADM1 para obtener divisiones administrativas de primer nivel
-    url = f"http://api.geonames.org/childrenJSON?geonameId={pais_geoname_id}&username={username}&lang=es&featureCode=ADM1"
+    # Se trae la lista completa de divisiones. El filtrado por búsqueda se hará en Python
+    # para permitir búsquedas de subcadenas (ej: "bogota" en "Distrito Capital de Bogotá").
+    # Esta es la lógica correcta que prioriza la funcionalidad sobre una optimización fallida.
+    url = (f"http://api.geonames.org/childrenJSON?geonameId={pais_geoname_id}&username={username}&lang=es"
+           f"&featureCode=ADM1&maxRows=500")
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json().get('geonames', [])
-        divisiones = [
-            {'id': d['geonameId'], 'nombre': d['name'], 'codigo': d['adminCode1']}
-            for d in data
-        ]
+    data = _consultar_geonames(url)
+    divisiones = [
+        {'id': d['geonameId'], 'nombre': d['name'], 'codigo': d['adminCode1']}
+        for d in data
+    ]
 
-        if search_term:
-            divisiones = [d for d in divisiones if search_term in d['nombre'].lower()]
+    # Se filtra la lista en Python si el usuario ha introducido un término de búsqueda.
+    if search_term:
+        divisiones = [d for d in divisiones if search_term in d['nombre'].lower()]
 
-        divisiones_ordenadas = sorted(divisiones, key=lambda x: x['nombre'])
-        return JsonResponse(divisiones_ordenadas, safe=False)
-    except requests.RequestException as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    divisiones_ordenadas = sorted(divisiones, key=lambda x: x['nombre'])
+    return JsonResponse(divisiones_ordenadas, safe=False)
 
-# Vista para buscar ciudades de una división
-def buscar_ciudades_geonames(request):
+
+def buscar_ciudades_geonames(request: HttpRequest) -> JsonResponse:
     division_geoname_id = request.GET.get('geoname_id')
     search_term = request.GET.get('q', '').lower()
     if not division_geoname_id:
         return JsonResponse([], safe=False)
 
     username = settings.GEONAMES_USERNAME
-    # PPL son lugares poblados (ciudades, pueblos, etc.)
-    url = f"http://api.geonames.org/childrenJSON?geonameId={division_geoname_id}&username={username}&lang=es&featureCode=PPL"
+    # Se trae la lista completa de ciudades. Se incluyen PPL (lugar poblado) y PPLC (capital)
+    # para asegurar que casos como Bogotá (PPLC) se listen correctamente.
+    url = (f"http://api.geonames.org/childrenJSON?geonameId={division_geoname_id}&username={username}&lang=es"
+           f"&featureCode=PPL&featureCode=PPLC&maxRows=1000")
 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json().get('geonames', [])
-        ciudades = [
-            {'id': c['geonameId'], 'nombre': c['name']}
-            for c in data
-        ]
+    data = _consultar_geonames(url)
+    ciudades = [
+        {'id': c['geonameId'], 'nombre': c['name']}
+        for c in data
+    ]
 
-        if search_term:
-            ciudades = [c for c in ciudades if search_term in c['nombre'].lower()]
+    # Se filtra la lista en Python si el usuario ha introducido un término de búsqueda.
+    if search_term:
+        ciudades = [c for c in ciudades if search_term in c['nombre'].lower()]
 
-        ciudades_ordenadas = sorted(ciudades, key=lambda x: x['nombre'])
-        return JsonResponse(ciudades_ordenadas, safe=False)
-    except requests.RequestException as e:
-        return JsonResponse({'error': str(e)}, status=500)
+    ciudades_ordenadas = sorted(ciudades, key=lambda x: x['nombre'])
+    return JsonResponse(ciudades_ordenadas, safe=False)
 
 @ensure_csrf_cookie
-def tercero_create_view(request):
+def tercero_create_view(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
-        # Pasamos todos los datos del POST al formulario.
-        # El formulario ahora sabe cómo manejar los campos de ubicación.
         form = TerceroForm(request.POST)
         if form.is_valid():
-            tercero = form.save() # ¡toda la lógica de guardado está encapsulada en el formulario!
+            tercero = form.save()
             messages.success(request, f'Tercero "{tercero.nombre}" creado exitosamente')
             return redirect(reverse('terceros:crear_tercero'))
         else:
             messages.error(request,'Error en creación de tercero, verifique la información ingresada')
     else:
-        # Si es un GET, simplemente creamos un formulario vacío.
         form = TerceroForm()
 
-    # Aquí definimos las versiones y las pasamos al contexto
+    # Nota: Para el versionado de estáticos, una solución más robusta a futuro
+    # es usar ManifestStaticFilesStorage de Django, que lo hace automáticamente.
     context = {
         'form': form,
         'CSS_VERSION': '1.0.1', # Incrementa este número cuando cambies main.css
@@ -128,7 +152,8 @@ def tercero_create_view(request):
     }
     return render(request, 'terceros/tercero_form.html', context)
 
-def verificar_existencia_tercero(request):
+
+def verificar_existencia_tercero(request: HttpRequest) -> JsonResponse:
     """
     Verifica si un tercero ya existe en la base de datos basado en el tipo y número de identificación
     Es una vista para ser consumida por AJAX/Fetch desde el frontend.
@@ -136,18 +161,15 @@ def verificar_existencia_tercero(request):
     tipo_id = request.GET.get('tipo_identificacion')
     nro_id = request.GET.get('nroid')
 
-    # Validamos que los parámetros necesarios estén presentes
     if not tipo_id or not nro_id:
         return JsonResponse({'error': 'Tipo ID y Nro ID son requeridos.'}, status=400)
-    # Usamos .first() para obtener el objeto si existe.  Es eficiente y devuelve None si no hay reultados.
+
     tercero_existente = Tercero.objects.filter(tipo_identificacion=tipo_id, nroid=nro_id).first()
 
     if tercero_existente:
-        # Si lo encontramos, devolvemos que existe y también su nombre.
         return JsonResponse({
             'existe': True,
             'nombre': tercero_existente.nombre
         })
     else:
-        # Si no lo encontramos, devolvemos que no existe.
         return JsonResponse({'existe': False})
