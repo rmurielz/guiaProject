@@ -1,87 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="SCOPE_TYPE" value="3" />
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3fb782ee-dc26-4b8b-88e3-728ee308a206" name="Changes" comment="">
+    <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Guia.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Guia.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ERP/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ERP/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terceros/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;rmurielz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/rmurielz/guiaProject.git&quot;,
+    &quot;accountId&quot;: &quot;2ef37144-547f-4601-9f38-76712464d1a6&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="30VRlh3KMPqvcN3wZNZc6bg2AJ8" />
+  <component name="ProjectId" id="30uttmDgllMj1wxWY0qHf5jxlL0" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;Django Server.Guia.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/proyecto/Guia/terceros&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/proyecto/Guia&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.android.studio.ml.bot.mainConfigurable&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
-    ],
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;HTML&quot;
-    ]
   }
 }</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\proyecto\Guia\terceros" />
-      <recent name="C:\proyecto\Guia\terceros\static\terceros\js" />
-      <recent name="C:\proyecto\Guia\terceros\static\terceros\)css" />
-      <recent name="C:\proyecto\Guia\terceros\templates\terceros" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\proyecto\Guia\terceros\templates\terceros" />
-    </key>
-  </component>
   <component name="RunManager">
     <configuration name="Guia" type="Python.DjangoServer" factoryName="Django server">
       <module name="Guia" />
@@ -90,7 +67,6 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
-        <env name="DJANGO_SETTINGS_MODULE" value="ERP.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -112,33 +88,23 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.439" />
         <option value="bundled-python-sdk-b3ae9b5d7125-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.439" />
       </set>
     </attachedChunks>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3fb782ee-dc26-4b8b-88e3-728ee308a206" name="Changes" comment="" />
-      <created>1753710907514</created>
+      <changelist id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="" />
+      <created>1754489503161</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1753710907514</updated>
-      <workItem from="1753710908071" duration="22073000" />
-      <workItem from="1753820691690" duration="5732000" />
-      <workItem from="1753834378079" duration="3492000" />
-      <workItem from="1753838064969" duration="298000" />
-      <workItem from="1753882096215" duration="14128000" />
-      <workItem from="1753906770457" duration="7760000" />
-      <workItem from="1753914749758" duration="5000" />
-      <workItem from="1753920398293" duration="3171000" />
-      <workItem from="1753968345239" duration="12850000" />
-      <workItem from="1753991749774" duration="157000" />
-      <workItem from="1753991936367" duration="9895000" />
-      <workItem from="1754062996849" duration="38610000" />
-      <workItem from="1754247311611" duration="430000" />
-      <workItem from="1754259465041" duration="11847000" />
-      <workItem from="1754354548657" duration="275000" />
-      <workItem from="1754402346993" duration="557000" />
+      <updated>1754489503161</updated>
+      <workItem from="1754489504468" duration="94000" />
+      <workItem from="1754489729580" duration="283000" />
+      <workItem from="1754490064176" duration="1701000" />
+      <workItem from="1754504086896" duration="3521000" />
+      <workItem from="1754512669741" duration="5273000" />
     </task>
     <servers />
   </component>

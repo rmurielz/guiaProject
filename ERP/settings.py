@@ -1,3 +1,4 @@
+# C:/proyecto/Guia/ERP/settings.py
 """
 Django settings for ERP project.
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django_ratelimit', # ¡IMPORTANTE! Se elimina de aquí para cargarlo condicionalmente.
     'terceros.apps.TercerosConfig',
 ]
 
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # 'django_ratelimit.middleware.RatelimitMiddleware', # ¡IMPORTANTE! Se elimina de aquí.
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -92,6 +95,39 @@ WSGI_APPLICATION = 'ERP.wsgi.application'
 DATABASES = {'default': dj_database_url.config(
     default=f'sqlite:///{BASE_DIR / "db.sqlite3"}')}
 
+# --- Cache Configuration ---
+# Configuración de caché robusta que se adapta al entorno.
+if DEBUG:
+    # Para desarrollo: LocMemCache es la más simple y no deja archivos.
+    # No necesitamos que sea compatible con ratelimit porque no se cargará.
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+        }
+    }
+else:
+    # Para producción: Se prioriza Redis si está configurado.
+    CACHE_URL = config('CACHE_URL', default=None)
+    if CACHE_URL and CACHE_URL.startswith('redis://'):
+        CACHES = {
+            'default': {
+                'BACKEND': 'django_redis.cache.RedisCache',
+                'LOCATION': CACHE_URL,
+                'OPTIONS': {
+                    'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+                }
+            }
+        }
+    else:
+        # Fallback a FileBasedCache si no se provee una URL de Redis.
+        cache_dir = '/tmp/django_cache' if config('RAILWAY_ENVIRONMENT_NAME', default=None) else BASE_DIR / 'django_cache'
+        CACHES = {
+            'default': {
+                'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+                'LOCATION': cache_dir,
+            }
+        }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -137,12 +173,30 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#static-root
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Almacenamiento de archivos estáticos para un cache-busting eficiente en producción.
+if not DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # GEONAMES_USERNAME es requerido para la funcionalidad de geolocalización.
-# Al no poner un 'default', decouple lanzará un error si la variable no está definida,
-# asegurando que la aplicación no pueda arrancar con una configuración inválida.
 GEONAMES_USERNAME = config('GEONAMES_USERNAME')
+
+# --- Django Ratelimit Configuration ---
+RATELIMIT_ENABLE = config('RATELIMIT_ENABLE', default=True, cast=bool)
+RATELIMIT_KEY = 'ip'
+RATELIMIT_RATE = config('RATELIMIT_RATE', default='100/m')
+RATELIMIT_BLOCK = config('RATELIMIT_BLOCK', default=True, cast=bool)
+RATELIMIT_VIEW = 'django_ratelimit.views.ratelimited'
+RATELIMIT_USE_CACHE = 'default'
+
+# --- Activación Condicional de Ratelimit ---
+# La práctica estándar es activar `ratelimit` solo en producción (cuando DEBUG=False)
+# para evitar problemas con cachés de desarrollo y simplificar el entorno local.
+if not DEBUG and RATELIMIT_ENABLE:
+    INSTALLED_APPS.append('django_ratelimit')
+    # Insertar el middleware en una posición adecuada. Después de CommonMiddleware es una buena opción.
+    MIDDLEWARE.insert(3, 'django_ratelimit.middleware.RatelimitMiddleware')
