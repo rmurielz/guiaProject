@@ -63,39 +63,49 @@ class Ciudad(models.Model):
 
 # --- Modelo Principal de Terceros (Actualizado) ---
 
+class TipoTercero(models.Model):
+    nombre = models.CharField(max_length=50, unique=True,verbose_name=("Tipo de tercero"))
+
+    class Meta:
+        verbose_name = _("Tipo de Tercero")
+        verbose_name_plural = _("Tipos de Tercero")
+        ordering = ["nombre"]
+
+    def __str__(self):
+        return self.nombre
+
+class TipoIdentificacion(models.Model):
+    nombre = models.CharField(max_length=50, unique=True,verbose_name=("Nombre"))
+
+    class Meta:
+        verbose_name = _("Tipo de ID")
+        verbose_name_plural = _("Tipos de ID")
+        ordering = ["nombre"]
+
+    def __str__(self):
+        return self.nombre
+
 class Tercero(models.Model):
     """
     Modelo para almacenar la información de terceros (clientes, proveedores, etc.).
     """
 
-    # --- Opciones para los campos 'choices' (usando la clase TextChoices recomendada) ---
-    class TipoTercero(models.TextChoices):
-        CLIENTE = 'cliente', _('Cliente')
-        PROVEEDOR = 'proveedor', _('Proveedor')
-        EMPLEADO = 'empleado', _('Empleado')
-        CONTRATISTA = 'contratista', _('Contratista')
-        ENTIDAD_REGULATORIA = 'entidadregulatoria', _('Entidad Regulatoria')
-        ENTIDAD_FINANCIERA = 'entidadfinanciera', _('Entidad Financiera')
-
-    class TipoIdentificacion(models.TextChoices):
-        CEDULA = 'cedula', _('Cédula de Ciudadanía')
-        NIT = 'nit', _('NIT')
-        RUC = 'ruc', _('RUC')
-        TARJETA_IDENTIDAD = 'tarjetaidentidad', _('Tarjeta de Identidad')
-        CEDULA_EXTRANJERIA = 'cedulaextranjeria', _('Cédula de Extranjería')
-        PASAPORTE = 'pasaporte', _('Pasaporte')
-
     # --- Campos del Modelo ---
 
     # 1. Clasificación e Identificación
-    tipo_tercero = models.CharField(
-        max_length=20,
-        choices=TipoTercero.choices,
+    tipo_tercero = models.ForeignKey(
+        TipoTercero,
+        on_delete=models.PROTECT,
+        related_name='terceros',
+        blank=False,
         verbose_name=_('Tipo de Tercero')
     )
-    tipo_identificacion = models.CharField(
-        max_length=30,
-        choices=TipoIdentificacion.choices,
+
+    tipo_identificacion = models.ForeignKey(
+        TipoIdentificacion,
+        on_delete=models.PROTECT,
+        related_name='identificaciones',
+        blank=False,
         verbose_name=_('Tipo ID')
     )
     nroid = models.CharField(

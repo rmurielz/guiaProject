@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // --- CONFIGURACIÓN CENTRALIZADA ---
+    const CONFIG = {
+        minQueryLength: 2,
+        debounceTime: 500,
+        messages: {
+            loading: 'Verificando...',
+            exists: (nombre) => `¡Atención! ID ya registrado para: ${nombre}`,
+            available: 'ID disponible',
+            networkError: 'Error de red al verificar',
+        },
+        icons: { loading: 'fa-spinner fa-spin', danger: 'fa-exclamation-triangle', success: 'fa-check-circle', error: 'fa-times-circle' }
+    };
+
     const { paisesUrl, divisionesUrl, ciudadesUrl, verificarUrl } = form.dataset;
     console.log('📡 URLs configuradas:', { paisesUrl, divisionesUrl, ciudadesUrl });
 
@@ -41,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clearValidationMessage();
             return;
         }
-        showValidationMessage('Verificando...', 'loading', 'fa-spinner fa-spin');
+        showValidationMessage(CONFIG.messages.loading, 'loading', CONFIG.icons.loading);
         const url = new URL(verificarUrl, window.location.origin);
         url.searchParams.append('tipo_identificacion', tipoID);
         url.searchParams.append('nroid', nroId);
@@ -50,10 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(url);
             const data = await response.json();
             if (data.existe) {
-                showValidationMessage(`¡Atención! ID ya registrado para: ${data.nombre}`, 'danger', 'fa-exclamation-triangle');
+                showValidationMessage(CONFIG.messages.exists(data.nombre), 'danger', CONFIG.icons.danger);
                 submitButton.disabled = true;
             } else {
-                showValidationMessage('ID disponible', 'success', 'fa-check-circle');
+                showValidationMessage(CONFIG.messages.available, 'success', CONFIG.icons.success);
                 submitButton.disabled = false;
             }
         } catch (error) {
@@ -63,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const debouncedCheck = () => {
         clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(checkTerceroExists, 500);
+        debounceTimeout = setTimeout(checkTerceroExists, CONFIG.debounceTime);
     };
 
     const showValidationMessage = (message, type, icon) => {
@@ -98,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`🔍 Buscando "${query}" en ${element.id}`);
 
                 // Exigimos 2+ caracteres SOLO si el usuario está escribiendo. Si el campo está vacío (on focus), permitimos la carga.
-                if (query.length > 0 && query.length < 2) {
+                if (query.length > 0 && query.length < CONFIG.minQueryLength) {
                     console.log('❌ Query muy corta, esperando más caracteres...');
                     return callback();
                 }
@@ -147,6 +160,40 @@ document.addEventListener('DOMContentLoaded', () => {
         return tomSelect;
     };
 
+    /**
+     * Maneja la lógica de cambio para un selector padre de TomSelect.
+     * Limpia y actualiza los selectores dependientes y los campos ocultos.
+     * @param {object} options
+     * @param {TomSelect} options.sourceSelect - La instancia de TomSelect que cambió.
+     * @param {TomSelect} options.dependentSelect - La instancia de TomSelect que depende de la fuente.
+     * @param {object} options.hiddenInputs - Un objeto con los inputs ocultos a actualizar.
+     * @param {TomSelect[]} [options.cascadingCleanup=[]] - Selectores adicionales para limpiar en cascada.
+     */
+    const handleParentSelectChange = ({ sourceSelect, dependentSelect, hiddenInputs, cascadingCleanup = [] }) => {
+        const value = sourceSelect.getValue();
+
+        // Limpiar y deshabilitar el selector dependiente directo
+        dependentSelect.clear();
+        dependentSelect.clearOptions();
+        dependentSelect.disable();
+
+        // Limpiar otros selectores en la cadena (ej. ciudad cuando cambia país)
+        cascadingCleanup.forEach(select => {
+            select.clear();
+            select.clearOptions();
+            select.disable();
+        });
+
+        // Actualizar campos ocultos
+        const data = value ? sourceSelect.options[value] : null;
+        hiddenInputs.id.value = data?.id || '';
+        hiddenInputs.nombre.value = data?.nombre || '';
+        if (hiddenInputs.codigo) hiddenInputs.codigo.value = data?.codigo || '';
+
+        // Habilitar el selector dependiente si hay un valor
+        if (value) dependentSelect.enable();
+    };
+
     // --- INICIALIZACIÓN DE TOM-SELECT ---
     console.log('🎯 Inicializando TomSelect instances...');
 
@@ -180,53 +227,28 @@ document.addEventListener('DOMContentLoaded', () => {
         ciudadTomSelect.disable();
 
         // --- EVENTOS DE CAMBIO ---
-        paisTomSelect.on('change', (value) => {
-            console.log('🌍 País cambió:', value);
-
-            // Limpiar campos dependientes
-            divisionTomSelect.clear();
-            divisionTomSelect.clearOptions();
-            ciudadTomSelect.clear();
-            ciudadTomSelect.clearOptions();
-            ciudadTomSelect.disable();
-
-            if (value) {
-                const data = paisTomSelect.options[value];
-                paisIdInput.value = data.id;
-                paisNombreInput.value = data.nombre;
-                paisCodigoInput.value = data.codigo || '';
-                divisionTomSelect.enable();
-            } else {
-                paisIdInput.value = '';
-                paisNombreInput.value = '';
-                paisCodigoInput.value = '';
-                divisionTomSelect.disable();
-            }
+        paisTomSelect.on('change', () => {
+            console.log('🌍 País cambió:', paisTomSelect.getValue());
+            handleParentSelectChange({
+                sourceSelect: paisTomSelect,
+                dependentSelect: divisionTomSelect,
+                hiddenInputs: { id: paisIdInput, nombre: paisNombreInput, codigo: paisCodigoInput },
+                cascadingCleanup: [ciudadTomSelect] // Al cambiar país, también se limpia ciudad
+            });
         });
 
-        divisionTomSelect.on('change', (value) => {
-            console.log('🏛️ División cambió:', value);
-
-            ciudadTomSelect.clear();
-            ciudadTomSelect.clearOptions();
-
-            if (value) {
-                const data = divisionTomSelect.options[value];
-                divisionIdInput.value = data.id;
-                divisionNombreInput.value = data.nombre;
-                divisionCodigoInput.value = data.codigo || '';
-                ciudadTomSelect.enable();
-            } else {
-                divisionIdInput.value = '';
-                divisionNombreInput.value = '';
-                divisionCodigoInput.value = '';
-                ciudadTomSelect.disable();
-            }
+        divisionTomSelect.on('change', () => {
+            console.log('🏛️ División cambió:', divisionTomSelect.getValue());
+            handleParentSelectChange({
+                sourceSelect: divisionTomSelect,
+                dependentSelect: ciudadTomSelect,
+                hiddenInputs: { id: divisionIdInput, nombre: divisionNombreInput, codigo: divisionCodigoInput }
+            });
         });
 
         ciudadTomSelect.on('change', (value) => {
             console.log('🏙️ Ciudad cambió:', value);
-
+            // Este es el último eslabón, solo actualiza su campo oculto
             if (value) {
                 const data = ciudadTomSelect.options[value];
                 ciudadNombreInput.value = data.nombre;

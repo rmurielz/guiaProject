@@ -5,16 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Guia.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Guia.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ERP/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/ERP/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/terceros/js/tercero_form_search.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/terceros/js/tercero_form_search.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,6 +34,9 @@
     &quot;accountId&quot;: &quot;2ef37144-547f-4601-9f38-76712464d1a6&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -41,11 +47,13 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Django Server.Guia.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
@@ -55,8 +63,15 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
+    ]
   }
 }</component>
   <component name="RunManager">
@@ -67,6 +82,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="ERP.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -93,6 +109,9 @@
       </set>
     </attachedChunks>
   </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="" />
@@ -104,7 +123,10 @@
       <workItem from="1754489729580" duration="283000" />
       <workItem from="1754490064176" duration="1701000" />
       <workItem from="1754504086896" duration="3521000" />
-      <workItem from="1754512669741" duration="5273000" />
+      <workItem from="1754512669741" duration="6983000" />
+      <workItem from="1754658777613" duration="1483000" />
+      <workItem from="1754661674501" duration="6781000" />
+      <workItem from="1754691943092" duration="3193000" />
     </task>
     <servers />
   </component>
