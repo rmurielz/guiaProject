@@ -16,12 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from terceros import views as terceros_views
+from apps.terceros import views as terceros_views
 
 
 urlpatterns = [
     path('', terceros_views.dashboard_view, name='dashboard'),
     path('info/', terceros_views.landing_page_view, name='landing_page'),
-    path('terceros/', include('terceros.urls', namespace='terceros')),
+    path('terceros/', include('apps.terceros.urls', namespace='terceros')),
     path('admin/', admin.site.urls),
 ]

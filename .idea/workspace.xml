@@ -4,12 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="">
+    <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="feat: Campos de ubicación geográfica readonly">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/terceros/js/tercero_form_search.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/terceros/js/tercero_form_search.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terceros/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terceros/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/terceros/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/terceros/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ERP/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ERP/asgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ERP/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ERP/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ERP/wsgi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manage.py" beforeDir="false" afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/terceros/css/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/terceros/images/Logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/terceros/images/Logo1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/terceros/js/tercero_form_search.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/forms.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/templates/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/templates/terceros/dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/templates/terceros/landing_page.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/templates/terceros/tercero_form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/terceros/views.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +38,14 @@
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -45,35 +73,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Django Server.Guia.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/proyecto/Guia&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;terminal&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.Guia.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "C:/proyecto/Guia/apps/core",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "aDefault",
+    "settings.editor.selected.configurable": "terminal",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ],
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Python"
     ]
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\proyecto\Guia\apps\core" />
+      <recent name="C:\proyecto\Guia\apps" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="Guia" type="Python.DjangoServer" factoryName="Django server">
       <module name="Guia" />
@@ -126,11 +164,25 @@
       <workItem from="1754512669741" duration="6983000" />
       <workItem from="1754658777613" duration="1483000" />
       <workItem from="1754661674501" duration="6781000" />
-      <workItem from="1754691943092" duration="3193000" />
+      <workItem from="1754691943092" duration="6838000" />
+      <workItem from="1754757794326" duration="3728000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: Campos de ubicación geográfica readonly">
+      <option name="closed" value="true" />
+      <created>1754697431978</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754697431978</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: Campos de ubicación geográfica readonly" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Campos de ubicación geográfica readonly" />
   </component>
 </project>

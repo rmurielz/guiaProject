@@ -50,8 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_ratelimit', # ¡IMPORTANTE! Se elimina de aquí para cargarlo condicionalmente.
-    'terceros.apps.TercerosConfig',
+    'apps.terceros.apps.TercerosConfig',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ERP.urls'
+ROOT_URLCONF = 'guia_erp.urls'
 
 TEMPLATES = [
     {
@@ -83,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ERP.wsgi.application'
+WSGI_APPLICATION = 'guia_erp.wsgi.application'
 
 
 # Database
