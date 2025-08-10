@@ -7,17 +7,26 @@
     <div class="card-header d-flex justify-content-between align-items-center">
         <h4 class="mb-0">
             <i class="fas fa-users me-2"></i>
-            Gestión de Terceros
+            Listado de Terceros
+            {% if estado_filtro == 'activos' %}
+                <span class="badge bg-success ms-2">Activos</span>
+            {% elif estado_filtro == 'inactivos' %}
+                <span class="badge bg-warning ms-2">Inactivos</span>
+            {% else %}
+                <span class="badge bg-secondary ms-2">Todos</span>
+            {% endif %}
         </h4>
         <div class="d-flex gap-2">
             <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
                 <i class="fas fa-arrow-left me-2"></i>
                 Regresar
             </a>
-            <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>
-                Crear Nuevo Tercero
-            </a>
+            {% if estado_filtro == 'activos' %}
+                <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Crear Nuevo Tercero
+                </a>
+            {% endif %}
         </div>
     </div>
     <div class="card-body">
@@ -28,35 +37,62 @@
                 <thead class="table-light">
                     <tr>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Identificación</th>
+                        <th scope="col">Tipo ID</th>
+                        <th scope="col">Número ID</th>
                         <th scope="col">Teléfono</th>
                         <th scope="col">Email</th>
-                        <th scope="col" class="text-center">Acciones</th>
+                        <th scope="col">Estado</th>
+                        {% if estado_filtro != 'todos' %}
+                            <th scope="col" class="text-center">Acciones</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
                     {% for tercero in terceros %}
                     <tr>
                         <td>
-                            <a href="{% url 'terceros:editar_tercero' tercero.pk %}" title="Editar {{ tercero.nombre }}">{{ tercero.nombre }}</a>
+                            {% if estado_filtro == 'todos' %}
+                                {{ tercero.nombre }}
+                            {% else %}
+                                <a href="{% url 'terceros:editar_tercero' tercero.pk %}" title="Editar {{ tercero.nombre }}">{{ tercero.nombre }}</a>
+                            {% endif %}
                         </td>
-                        <td>{{ tercero.tipo_identificacion.nombre }}: {{ tercero.nroid }}</td>
+                        <td>{{ tercero.tipo_identificacion.nombre }}</td>
+                        <td>{{ tercero.nroid }}</td>
                         <td>{{ tercero.telefono|default:"N/A" }}</td>
                         <td>{{ tercero.email|default:"N/A" }}</td>
-                        <td class="text-center">
-                            <!-- Enlaces a vistas de editar y eliminar -->
-                            <a href="{%  url 'terceros:editar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
-                                <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <a href="{% url 'terceros:eliminar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                        <td>
+                            {% if tercero.activo %}
+                                <span class="badge rounded-pill bg-success">Activo</span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-warning text-dark">Inactivo</span>
+                            {% endif %}
                         </td>
+                        {% if estado_filtro != 'todos' %}
+                            <td class="text-center">
+                                {% if tercero.activo %}
+                                    <!-- Acciones para terceros ACTIVOS -->
+                                    <a href="{% url 'terceros:editar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-primary" title="Editar"><i class="fas fa-pencil-alt"></i></a>
+                                    <a href="{% url 'terceros:eliminar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                                {% else %}
+                                    <!-- Acción para terceros INACTIVOS -->
+                                    <a href="{% url 'terceros:activar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-success" title="Reactivar">
+                                        <i class="fas fa-redo"></i>
+                                    </a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center py-4">
-                            No hay terceros registrados. <a href="{% url 'terceros:crear_tercero' %}">¡Crea el primero!</a>
+                        <td colspan="{% if estado_filtro != 'todos' %}7{% else %}6{% endif %}" class="text-center py-4">
+                            {% if estado_filtro == 'inactivos' %}
+                                No se encontraron terceros inactivos.
+                            {% elif estado_filtro == 'todos' %}
+                                No hay terceros registrados en el sistema.
+                            {% else %}
+                                No hay terceros activos registrados. <a href="{% url 'terceros:crear_tercero' %}">¡Crea el primero!</a>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -69,7 +105,7 @@
         <nav aria-label="Navegación de páginas">
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&estado={{ estado_filtro }}">Anterior</a></li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">Anterior</span></li>
                 {% endif %}
@@ -77,7 +113,7 @@
                 <li class="page-item active" aria-current="page"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
 
                 {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&estado={{ estado_filtro }}">Siguiente</a></li>
                 {% else %}
                     <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
                 {% endif %}

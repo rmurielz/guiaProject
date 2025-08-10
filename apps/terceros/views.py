@@ -27,13 +27,29 @@ class TerceroListView(ListView):
     def get_queryset(self):
         """
         Optimizado con select_related para evitar N+1 queries.
-        Incluye la cadena completa de ubicación geográfica.
+        Incluye la cadena completa de ubicación geográfica y filtra por estado.
         """
-        return Tercero.objects.select_related(
+        base_queryset = Tercero.objects.select_related(
             'tipo_identificacion',
             'tipo_tercero',
             'ciudad__division__pais'  # Precarga toda la cadena geográfica
-        ).filter(activo=True).order_by('nombre')
+        )
+
+        # Obtener el parámetro de estado, por defecto 'activos'
+        estado = self.request.GET.get('estado', 'activos')
+
+        if estado == 'activos':
+            return base_queryset.filter(activo=True).order_by('nombre')
+        elif estado == 'inactivos':
+            return base_queryset.filter(activo=False).order_by('nombre')
+        else: # 'todos' o cualquier otro valor
+            return base_queryset.order_by('nombre')
+
+    def get_context_data(self, **kwargs):
+        """Añade el estado del filtro al contexto para usarlo en la plantilla."""
+        context = super().get_context_data(**kwargs)
+        context['estado_filtro'] = self.request.GET.get('estado', 'activos')
+        return context
 
 class TerceroCreateView(CreateView):
     """
@@ -146,7 +162,28 @@ class TerceroDeleteView(DeleteView):
         tercero = self.get_object()
         tercero.activo = False
         tercero.save(update_fields=['activo'])  # Optimización: solo actualiza el campo necesario
+        cache.delete('dashboard_stats')  # Invalidar cache del dashboard
         messages.success(self.request, f'El tercero "{tercero.nombre}" ha sido eliminado.')
+        return redirect(self.success_url)
+
+class TerceroActivateView(DeleteView):
+    """
+    Vista para reactivar un tercero que fue eliminado suavemente.
+    Reutilizamos DeleteView por su simplicidad para manejar un POST a un objeto.
+    """
+    model = Tercero
+    template_name = 'terceros/tercero_confirm_activate.html'
+    success_url = reverse_lazy('terceros:Lista_terceros')
+
+    def form_valid(self, form):
+        """
+        En lugar de borrar, reactivamos el tercero.
+        """
+        tercero = self.get_object()
+        tercero.activo = True
+        tercero.save(update_fields=['activo'])
+        cache.delete('dashboard_stats')  # Invalidar cache del dashboard
+        messages.success(self.request, f'El tercero "{tercero.nombre}" ha sido reactivado exitosamente.')
         return redirect(self.success_url)
 
 

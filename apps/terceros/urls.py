@@ -16,6 +16,7 @@ urlpatterns = [
     # URLs para editar y eliminar
     path('<int:pk>/editar/', views.TerceroUpdateView.as_view(), name='editar_tercero'),
     path('<int:pk>/eliminar/', views.TerceroDeleteView.as_view(), name='eliminar_tercero'),
+    path('<int:pk>/activar/', views.TerceroActivateView.as_view(), name='activar_tercero'),
 
     # URLs para la API de GeoNames - OPTIMIZADAS CON CACHE
     # Los países cambian raramente, cache de 1 hora
