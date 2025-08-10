@@ -1,0 +1,334 @@
+/* --- PALETA DE COLORES MODO OSCURO COMPLETO --- */
+:root {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+
+    /* Colores de Texto (Invertidos para fondo oscuro) */
+    --text-primary: #f9fafb;      /* Texto principal casi blanco */
+    --text-secondary: #9ca3bd;    /* Texto secundario gris claro */
+
+    /* Fondos Oscuros */
+    --body-bg: #111827;           /* Fondo principal muy oscuro (azul-gris) */
+    --card-bg: #1f2937;           /* Fondo de tarjetas/componentes un poco más claro */
+    --card-border: #374151;       /* Borde sutil para las tarjetas */
+
+    /* Sidebar (Ajustado para cohesión) */
+    --sidebar-bg: #1f2937;        /* Mismo color que las tarjetas para unificar */
+    --sidebar-text: #9ca3bd;
+    --sidebar-hover-bg: #374151;
+    --sidebar-active-bg: var(--primary);
+    --sidebar-active-text: #ffffff;
+    --sidebar-border: #374151;
+    --sidebar-width: 260px; /* Variable para el ancho del sidebar */
+
+    /* Topbar */
+    --topbar-bg: #1f2937;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: var(--body-bg);
+    font-size: 0.95rem;
+    color: var(--text-primary); /* ¡Cambio clave! El color de texto por defecto es claro */
+}
+
+/* --- Estructura Principal: Sidebar + Contenido --- */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    position: fixed; top: 0; left: 0; height: 100vh; width: var(--sidebar-width);
+    transition: all 0.3s ease; z-index: 1000; display: flex; flex-direction: column;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+/* --- Estilos del Sidebar (Ajustados para el modo oscuro) --- */
+.sidebar-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--sidebar-border);
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-header .sidebar-logo {
+    height: 70px;
+    width: auto;
+    margin-right: 0.75rem;
+}
+
+.nav-links {
+    padding: 1rem 0;
+    flex-grow: 1;
+}
+
+.nav-links .nav-category {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nav-links a {
+    display: flex;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    font-weight: 600;
+}
+
+.nav-links a:hover {
+    background-color: var(--sidebar-hover-bg);
+    color: var(--text-primary);
+}
+
+.nav-links a.active {
+    background-color: var(--sidebar-active-bg);
+    color: var(--sidebar-active-text);
+    border-right: 4px solid var(--primary-dark);
+}
+
+.nav-links a i {
+    width: 20px;
+    margin-right: 1rem;
+    text-align: center;
+}
+
+/* --- Estilos del Contenido Principal (Ahora oscuro) --- */
+.top-bar {
+    background-color: var(--topbar-bg);
+    padding: 0.75rem 2rem;
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-profile { display: flex; align-items: center; gap: 1rem; }
+.user-profile img { width: 40px; height: 40px; border-radius: 50%; }
+
+/* --- Estilos para los componentes de los formularios (Ahora oscuros) --- */
+.page-header {
+    color: var(--text-primary);
+    padding: 0 0 1.5rem 0;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.page-header p {
+    margin: 0.5rem 0 0 0;
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+.form-container{
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--card-border);
+}
+
+.form-subheading{
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.form-row-spacing {
+    margin-top: 1rem;
+}
+
+.form-control, .form-select {
+    background-color: #374151;
+    color: var(--text-primary);
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    padding: 0.4rem 0.75rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.form-control::placeholder {
+    color: #6b7280;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    background-color: #374151;
+    color: var(--text-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%239ca3bd' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.validation-message {
+    display: flex; align-items: center; margin-top: 0.3rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.validation-message.success { background-color: #10b981; color: #ffffff; }
+.validation-message.danger { background-color: #ef4444; color: #ffffff; }
+.validation-message.loading { background-color: #60a5fa; color: #ffffff; }
+.validation-message i { margin-right: 0.5rem; }
+
+.alert { border-radius: 8px; }
+
+/* --- Responsive Design --- */
+@media (max-width: 992px) {
+    .sidebar {
+        left: calc(-1 * var(--sidebar-width));
+    }
+    body.sidebar-toggled .sidebar {
+        left: 0;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+body.sidebar-toggled .sidebar-overlay {
+    display: block;
+}
+
+.top-bar-left {
+    display: flex;
+    align-items: center;
+}
+
+#sidebar-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+#sidebar-toggle-btn:hover {
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   TOM-SELECT - LAYOUT-FIRST FIX
+   ========================================================================== */
+
+/* 1. LA REGLA CLAVE: Forzar al componente a ocupar su propia línea */
+.ts-wrapper {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* 2. TEMA: Hacer que el control se parezca a nuestros otros inputs */
+.ts-wrapper .ts-control {
+    background-color: #374151;
+    border: 1px solid #4b5563;
+    border-radius: 8px;
+    padding: 0.4rem 0.75rem; /* Igual que .form-control */
+    transition: all 0.3s ease;
+    font-size: 0.9rem;      /* Igual que .form-control */
+    min-height: 38px;       /* Altura aproximada de .form-control */
+    box-shadow: none;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* Igual que .form-control:focus */
+}
+
+/* 3. TEXTO: Estilos para el texto interior */
+/* Estilo para el texto mientras se escribe (esto funciona bien) */
+.ts-wrapper .ts-control input {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    padding: 0;
+    margin: 0;
+    background-color: transparent; /* La clave: el fondo es transparente y hereda el color oscuro del control */
+}
+
+.form-container .ts-wrapper.single .ts-control .item {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+}
+
+.ts-wrapper .ts-control input::placeholder {
+    color: #6b7280;
+}
+
+/* 4. VISIBILIDAD: Intercambiar input y el item seleccionado */
+/* Cuando NO hay item, el div del item se oculta */
+.ts-wrapper.single:not(.has-items) .ts-control .item {
+    display: none !important;
+}
+
+/* Cuando SÍ hay item, el campo de texto se oculta */
+.ts-wrapper.single.has-items .ts-control input {
+    display: none !important;
+}
+
+/* 5. DROPDOWN: Estilos para el menú desplegable */
+.ts-dropdown {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 1050;
+    margin-top: 4px;
+}
+
+.ts-dropdown .option {
+    color: var(--text-secondary);
+    padding: 0.6rem 0.75rem;
+}
+
+.ts-dropdown .option.active,
+.ts-dropdown .option:hover {
+    background-color: var(--primary);
+    color: var(--sidebar-active-text);
+}
+
+/* Color de la flecha */
+.ts-wrapper.single .ts-control:after {
+    border-color: #9ca3bd transparent transparent transparent;
+}
+
+/*
+ * SOBREESCRITURA FINAL Y DEFINITIVA:
+ * Esta regla es más específica que la de tom-select.css (línea 389)
+ * porque usamos una clase contenedora. Esto garantiza que nuestro fondo oscuro
+ * gane la batalla de estilos cuando el control está activo.
+*/
+.form-container .ts-wrapper.single.input-active .ts-control {
+    background-color: #374151 !important;
+}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Terceros{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">
+            <i class="fas fa-users me-2"></i>
+            Gestión de Terceros
+        </h4>
+        <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            Crear Nuevo Tercero
+        </a>
+    </div>
+    <div class="card-body">
+        {# Aquí podríamos añadir un formulario de búsqueda en el futuro #}
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Identificación</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Email</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tercero in terceros %}
+                    <tr>
+                        <td>{{ tercero.nombre }}</td>
+                        <td>{{ tercero.tipo_identificacion.nombre }}: {{ tercero.nroid }}</td>
+                        <td>{{ tercero.telefono|default:"N/A" }}</td>
+                        <td>{{ tercero.email|default:"N/A" }}</td>
+                        <td class="text-center">
+                            <!-- Enlaces a vistas de editar y eliminar -->
+                            <a href="{%  url 'terceros:editar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a href="{% url 'terceros:eliminar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">}
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">
+                            No hay terceros registrados. <a href="{% url 'terceros:crear_tercero' %}">¡Crea el primero!</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        {% if is_paginated %}
+        <nav aria-label="Navegación de páginas">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Anterior</span></li>
+                {% endif %}
+
+                <li class="page-item active" aria-current="page"><span class="page-link">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a></li>
+                {% else %}
+                    <li class="page-item disabled"><span class="page-link">Siguiente</span></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

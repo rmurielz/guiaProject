@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+{%  load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Única Integral de Abastecimiento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0d6efd;
+            --light: #f8f9fa;
+            --dark: #1a2a36;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        .fw-medium {
+            font-weight: 600 !important;
+        }
+
+        .fw-bold {
+            font-weight: 700 !important;
+        }
+
+        .btn {
+            font-family: 'Heebo', sans-serif;
+            font-weight: 500;
+            transition: .5s;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        .navbar-brand img {
+            max-height: 40px;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, .75);
+            font-size: 1.1rem;
+        }
+
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link.active {
+            color: #fff;
+        }
+
+        .hero-header {
+            background: linear-gradient(rgba(26, 42, 54, .8), rgba(26, 42, 54, .8)), url(https://placehold.co/1920x1080/1a2a36/ffffff?text=Fondo+Abstracto) center center no-repeat;
+            background-size: cover;
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::before {
+            position: absolute;
+            content: "";
+            width: 45px;
+            height: 2px;
+            top: 50%;
+            left: -55px;
+            margin-top: -1px;
+            background: var(--primary);
+        }
+
+        .section-title::after {
+            position: absolute;
+            content: "";
+            width: 45px;
+            height: 2px;
+            top: 50%;
+            right: -55px;
+            margin-top: -1px;
+            background: var(--primary);
+        }
+
+        .service-item {
+            position: relative;
+            height: 100%;
+            padding: 30px;
+            background: var(--light);
+            border-radius: 10px;
+            transition: .5s;
+        }
+
+        .service-item:hover {
+            background: var(--primary);
+        }
+
+        .service-item .service-icon {
+            margin-bottom: 30px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            border-radius: 50px;
+            transition: .5s;
+        }
+
+        .service-item:hover .service-icon {
+            background: #fff;
+        }
+
+        .service-item:hover .service-icon i {
+            color: var(--primary) !important;
+        }
+
+        .service-item h5,
+        .service-item p {
+            transition: .5s;
+        }
+
+        .service-item:hover h5,
+        .service-item:hover p {
+            color: #fff;
+        }
+
+        .testimonial-carousel {
+            background: linear-gradient(rgba(26, 42, 54, .8), rgba(26, 42, 54, .8)), url(https://placehold.co/1920x1080/1a2a36/ffffff?text=Fondo+Textura) center center no-repeat;
+            background-size: cover;
+        }
+
+        .testimonial-carousel .testimonial-item {
+            padding: 30px;
+        }
+
+        .team-item {
+            position: relative;
+            transition: .5s;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .team-item .team-social {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(26, 42, 54, .8);
+            transition: .5s;
+            opacity: 0;
+        }
+
+        .team-item:hover .team-social {
+            opacity: 1;
+        }
+
+        .footer {
+            background: var(--dark);
+            color: #a7b4be;
+        }
+
+        .footer .btn.btn-link {
+            display: block;
+            margin-bottom: 5px;
+            padding: 0;
+            text-align: left;
+            color: #a7b4be;
+            font-weight: normal;
+            text-transform: capitalize;
+            transition: .3s;
+        }
+
+        .footer .btn.btn-link:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0 sticky-top shadow-sm">
+        <a href="" class="navbar-brand p-0">
+            <h1 class="text-primary m-0"><i class="fa fa-cogs me-3"></i>GUIA</h1>
+            <!-- <img src="{% static 'terceros/images/logo.png' %}" alt="Logo"> -->
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-0">
+                <a href="#home" class="nav-item nav-link active">Inicio</a>
+                <a href="#about" class="nav-item nav-link">Nosotros</a>
+                <a href="#services" class="nav-item nav-link">Servicios</a>
+                <a href="#team" class="nav-item nav-link">Equipo</a>
+                <a href="#contact" class="nav-item nav-link">Contacto</a>
+            </div>
+            <a href="" class="btn btn-light rounded-pill text-primary py-2 px-4 ms-lg-5">Cotizar</a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Hero Start -->
+    <div class="container-fluid hero-header bg-dark py-5 mb-5" id="home">
+        <div class="container py-5">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-6 text-center text-lg-start">
+                    <h1 class="display-4 text-white animated slideInRight">Gestión Única Integral de Abastecimiento</h1>
+                    <p class="text-white mb-4 pb-2 animated slideInRight">Impulsamos tu negocio al siguiente nivel con tecnología de punta, estrategias personalizadas y un equipo de expertos dedicados a tu éxito.</p>
+                    <a href="#contact" class="btn btn-primary py-3 px-5 me-3 animated slideInRight">Contáctanos</a>
+                </div>
+                <div class="col-lg-6 text-center text-lg-start">
+                    <img class="img-fluid animated zoomIn" src="https://placehold.co/600x600/0d6efd/ffffff?text=Innovación" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- About Start -->
+    <section class="container-xxl py-5" id="about">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="https://placehold.co/600x400/e9ecef/343a40?text=Equipo+Trabajando" alt="">
+                </div>
+                <div class="col-lg-6">
+                    <h5 class="section-title ff-secondary text-start text-primary fw-normal">Sobre Nosotros</h5>
+                    <h1 class="mb-4">La Mejor Solución Digital con 10 Años de Experiencia</h1>
+                    <p class="mb-4">Somos un equipo apasionado por la tecnología y la innovación. Nuestro objetivo es ofrecer soluciones que no solo resuelvan problemas, sino que también generen un impacto positivo y duradero en el negocio de nuestros clientes.</p>
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+                                <h3>Expertos</h3>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-center border-start border-5 border-primary px-3">
+                                <h3>Innovadores</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary py-3 px-5 mt-2" href="">Leer Más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About End -->
+
+    <!-- Services Start -->
+    <section class="container-xxl py-5" id="services">
+        <div class="container">
+            <div class="text-center">
+                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Nuestros Servicios</h5>
+                <h1 class="mb-5">Explora Nuestros Servicios</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-search text-white"></i>
+                        </div>
+                        <h5>Consultoría SEO</h5>
+                        <p>Mejoramos tu visibilidad en motores de búsqueda para atraer más clientes.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-laptop-code text-white"></i>
+                        </div>
+                        <h5>Desarrollo Web</h5>
+                        <p>Creamos sitios web modernos, rápidos y adaptados a tus necesidades.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-bullhorn text-white"></i>
+                        </div>
+                        <h5>Marketing Digital</h5>
+                        <p>Diseñamos campañas efectivas para potenciar tu marca en el mundo digital.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-envelope-open-text text-white"></i>
+                        </div>
+                        <h5>Email Marketing</h5>
+                        <p>Conectamos con tu audiencia a través de campañas de email personalizadas.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-mobile-alt text-white"></i>
+                        </div>
+                        <h5>Desarrollo de Apps</h5>
+                        <p>Llevamos tu idea a las tiendas de iOS y Android con aplicaciones nativas.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <i class="fa fa-3x fa-chart-pie text-white"></i>
+                        </div>
+                        <h5>Análisis de Datos</h5>
+                        <p>Transformamos tus datos en decisiones estratégicas para tu negocio.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Services End -->
+
+    <!-- Testimonial Start -->
+    <section class="container-fluid testimonial-carousel py-5">
+        <div class="container">
+            <div class="text-center">
+                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Testimonios</h5>
+                <h1 class="mb-5 text-white">Lo que dicen nuestros clientes</h1>
+            </div>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-item text-center text-white">
+                            <img class="img-fluid rounded-circle mx-auto mb-4" src="https://placehold.co/100x100/ffffff/343a40?text=Cliente+1" style="width: 100px; height: 100px;">
+                            <p class="fs-5">"El equipo de GUIA transformó nuestra presencia online. Los resultados superaron nuestras expectativas. ¡Totalmente recomendados!"</p>
+                            <h5 class="mb-1">Maria Rodriguez</h5>
+                            <small>CEO, Tech Solutions</small>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-item text-center text-white">
+                            <img class="img-fluid rounded-circle mx-auto mb-4" src="https://placehold.co/100x100/ffffff/343a40?text=Cliente+2" style="width: 100px; height: 100px;">
+                            <p class="fs-5">"Profesionalismo, creatividad y compromiso. Trabajar con ellos fue una experiencia increíble y muy productiva."</p>
+                            <h5 class="mb-1">Juan Perez</h5>
+                            <small>Director, Innova Corp</small>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonial End -->
+
+    <!-- Team Start -->
+    <section class="container-xxl pt-5 pb-3" id="team">
+        <div class="container">
+            <div class="text-center">
+                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Nuestro Equipo</h5>
+                <h1 class="mb-5">Conoce a Nuestros Expertos</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-item text-center rounded overflow-hidden">
+                        <div class="rounded-circle overflow-hidden m-4">
+                            <img class="img-fluid" src="https://placehold.co/300x300/e9ecef/343a40?text=Miembro+1" alt="">
+                        </div>
+                        <h5 class="mb-0">Ana García</h5>
+                        <small>Directora de Proyectos</small>
+                        <div class="team-social">
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-item text-center rounded overflow-hidden">
+                        <div class="rounded-circle overflow-hidden m-4">
+                            <img class="img-fluid" src="https://placehold.co/300x300/e9ecef/343a40?text=Miembro+2" alt="">
+                        </div>
+                        <h5 class="mb-0">Carlos Martinez</h5>
+                        <small>Líder de Desarrollo</small>
+                        <div class="team-social">
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-item text-center rounded overflow-hidden">
+                        <div class="rounded-circle overflow-hidden m-4">
+                            <img class="img-fluid" src="https://placehold.co/300x300/e9ecef/343a40?text=Miembro+3" alt="">
+                        </div>
+                        <h5 class="mb-0">Laura Fernandez</h5>
+                        <small>Especialista en Marketing</small>
+                        <div class="team-social">
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-item text-center rounded overflow-hidden">
+                        <div class="rounded-circle overflow-hidden m-4">
+                            <img class="img-fluid" src="https://placehold.co/300x300/e9ecef/343a40?text=Miembro+4" alt="">
+                        </div>
+                        <h5 class="mb-0">David López</h5>
+                        <small>Diseñador UX/UI</small>
+                        <div class="team-social">
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Team End -->
+
+    <!-- Contact Start -->
+    <section class="container-xxl py-5" id="contact">
+        <div class="container">
+            <div class="text-center">
+                <h5 class="section-title ff-secondary text-center text-primary fw-normal">Contacto</h5>
+                <h1 class="mb-5">Contáctanos Para Cualquier Consulta</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="name" placeholder="Tu Nombre">
+                                    <label for="name">Tu Nombre</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email" placeholder="Tu Email">
+                                    <label for="email">Tu Email</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="subject" placeholder="Asunto">
+                                    <label for="subject">Asunto</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Deja tu mensaje aquí" id="message" style="height: 150px"></textarea>
+                                    <label for="message">Mensaje</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Enviar Mensaje</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="section-title ff-secondary text-start text-primary fw-normal">Nuestra Oficina</h5>
+                    <p><i class="fa fa-map-marker-alt text-primary me-3"></i>Cra 106 15A 25 Manzana 17 Bodega 6 Zona Franca Bogotá, Colombia</p>
+                    <p><i class="fa fa-phone-alt text-primary me-3"></i>+57 321 302 46 23</p>
+                    <p><i class="fa fa-envelope text-primary me-3"></i>rmuriel@guiaol.com</p>
+                    <iframe class="position-relative rounded w-100 h-100"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.975615839254!2d-74.083958985238!3d4.600985996657903!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99a1a7a32363%3A0x523182552ab65e5a!2sPlaza%20de%20Bol%C3%ADvar!5e0!3m2!1ses!2sco!4v1627931189311!5m2!1ses!2sco"
+                        frameborder="0" style="min-height: 250px; border:0;" allowfullscreen="" aria-hidden="false"
+                        tabindex="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact End -->
+
+    <!-- Footer Start -->

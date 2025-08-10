@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Creación de Terceros{% endblock %}
+{% block extra_css %}
+{# AÑADIMOS LA HOJA DE ESTILOS BASE DE TOM-SELECT. ESTA ES LA CLAVE. #}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+
+        <form method="POST" action="{% url 'terceros:crear_tercero' %}" id="terceros-form"
+            data-paises-url="{% url 'terceros:api_buscar_paises' %}"
+            data-divisiones-url ="{% url 'terceros:api_buscar_divisiones' %}"
+            data-ciudades-url ="{% url 'terceros:api_buscar_ciudades' %}"
+            data-verificar-url ="{% url 'terceros:api_verificar_tercero' %}"
+            novalidate>
+            {% csrf_token %}
+
+            <div style="display:none;">
+                {{ form.pais_geoname_id }}
+                {{ form.pais_nombre }}
+                {{ form.pais_codigo_iso }}
+                {{ form.division_geoname_id }}
+                {{ form.division_nombre }}
+                {{ form.division_codigo_iso }}
+                {{ form.ciudad_geoname_id }}
+                {{ form.ciudad_nombre }}
+            </div>
+
+            <div class="form-container">
+                <!-- Mensajes -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success {% else %}alert-danger{% endif %} alert-dismissible fade show mb-2" role="alert">
+                            <i class="fas {% if message.tags == 'success' %}fa-circle{% else %}fa-exclamation-triangle{% endif %} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Sección de Identificación -->
+                <h5 class="form-subheading mb-1">Identificación</h5>
+                <hr class="my-1">
+
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <label for="{{ form.tipo_tercero.id_for_label }}" class="form-label">{{ form.tipo_tercero.label }}</label>
+                        {{ form.tipo_tercero }}
+                        {{ form.tipo_tercero.errors }}
+                    </div>
+                    <div class="col-md-3">
+                        <label for="{{ form.tipo_identificacion.id_for_label }}" class="form-label">{{ form.tipo_identificacion.label }}</label>
+                        {{ form.tipo_identificacion }}
+                        {{ form.tipo_identificacion.errors }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="{{ form.nroid.id_for_label }}" class="form-label">{{ form.nroid.label }}</label>
+                        {{ form.nroid }}
+                        <div id="id-validation-message"></div>
+                        {{ form.nroid.errors }}
+                    </div>
+                    <div class="col-md-2">
+                        <label for="{{ form.digito_verificacion.id_for_label }}" class="form-label">{{ form.digito_verificacion.label }}</label>
+                        {{ form.digito_verificacion }}
+                        {{ form.digito_verificacion.errors }}
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                    <div class="col-md-6">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label">{{ form.nombre.label }}</label>
+                        {{ form.nombre }}
+                        {{ form.nombre.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.nombre_comercial.id_for_label }}" class="form-label">{{ form.nombre_comercial.label }}</label>
+                        {{ form.nombre_comercial }}
+                        {{ form.nombre_comercial.errors }}
+                    </div>
+                </div>
+
+                <!-- Sección de Contacto y Ubicación -->
+                <h5 class="form-subheading mb-1 mt-2">Datos de Contacto y Ubicación</h5>
+                <hr class="my-1">
+
+                <div class="row g-2">
+                    <div class="col-md-12">
+                        <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.direccion.label }}</label>
+                        {{ form.direccion }}
+                        {{ form.direccion.errors }}
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                    <div class="col-md-4">
+                        <label for="pais-select" class="form-label">País</label>
+                        <select id="pais-select" placeholder="Escriba para buscar un país..."></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="division-select" class="form-label">Departamento / Estado / Provincia</label>
+                        <select id="division-select" placeholder="Primero seleccione un país..." disabled></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="ciudad-select" class="form-label">Ciudad</label>
+                        <select id="ciudad-select" name="{{ form.ciudad_geoname_id.name }}" placeholder="Primero seleccione una división..." disabled></select>
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                    <div class="col-md-6">
+                        <label for="{{ form.contacto.id_for_label }}" class="form-label">{{ form.contacto.label }}</label>
+                        {{ form.contacto }}
+                        {{ form.contacto.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.cargo.id_for_label }}" class="form-label">{{ form.cargo.label }}</label>
+                        {{ form.cargo }}
+                        {{ form.cargo.errors }}
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-1">
+                    <div class="col-md-6">
+                        <label for="{{ form.telefono.id_for_label }}" class="form-label">{{ form.telefono.label }}</label>
+                        {{ form.telefono }}
+                        {{ form.telefono.errors }}
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <hr class="my-2">
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo me-2"></i>Limpiar Formulario
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="submit-button">
+                        <i class="fas fa-save me-2"></i>Guardar Tercero
+                    </button>
+                </div>
+            </div>
+        </form>
+{% endblock %}
+
+{% block extra_js %}
+    {# Añadinmos el JS de Tom Select y luego nuestro script personalizado #}
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <script src="{% static 'js/terceros/tercero_form_search.js' %}?v={% now 'U' %}" defer></script>
+{% endblock %}
