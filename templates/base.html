@@ -36,7 +36,7 @@
             </a>
 
             <div class="nav-category">Módulos</div>
-            <a href="{% url 'terceros:Lista_terceros' %}" class="{% if request.resolver_match.view_name == 'terceros:crear_tercero' %}active{% endif %}">
+            <a href="{% url 'terceros:Lista_terceros' %}" class="{% if request.resolver_match.app_name == 'terceros' %}active{% endif %}">
                 <i class="fas fa-users"></i>
                 <span>Terceros</span>
             </a>
@@ -68,6 +68,9 @@
 
         <!-- Área de Contenido Dinámico -->
         <main class="container-fluid p-3">
+            {# Incluimos el componente de mensajes para que aparezca en todas las páginas #}
+            {% include 'includes/messages.html' %}
+
             {% block content %}
                 <!-- El contenido de cada página (ej: tercero_form.html) se insertará aquí -->
             {% endblock %}

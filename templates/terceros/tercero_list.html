@@ -9,10 +9,16 @@
             <i class="fas fa-users me-2"></i>
             Gestión de Terceros
         </h4>
-        <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary">
-            <i class="fas fa-plus me-2"></i>
-            Crear Nuevo Tercero
-        </a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>
+                Regresar
+            </a>
+            <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>
+                Crear Nuevo Tercero
+            </a>
+        </div>
     </div>
     <div class="card-body">
         {# Aquí podríamos añadir un formulario de búsqueda en el futuro #}
@@ -31,7 +37,9 @@
                 <tbody>
                     {% for tercero in terceros %}
                     <tr>
-                        <td>{{ tercero.nombre }}</td>
+                        <td>
+                            <a href="{% url 'terceros:editar_tercero' tercero.pk %}" title="Editar {{ tercero.nombre }}">{{ tercero.nombre }}</a>
+                        </td>
                         <td>{{ tercero.tipo_identificacion.nombre }}: {{ tercero.nroid }}</td>
                         <td>{{ tercero.telefono|default:"N/A" }}</td>
                         <td>{{ tercero.email|default:"N/A" }}</td>
@@ -40,7 +48,7 @@
                             <a href="{%  url 'terceros:editar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
-                            <a href="{% url 'terceros:eliminar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">}
+                            <a href="{% url 'terceros:eliminar_tercero' tercero.pk %}" class="btn btn-sm btn-outline-danger" title="Eliminar">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </td>

@@ -10,7 +10,8 @@
 {% block content %}
 <!-- Page Header -->
 
-        <form method="POST" action="{% url 'terceros:crear_tercero' %}" id="terceros-form"
+        {# Dejar action="" es una mejor práctica, ya que el formulario se enviará a la URL actual (funciona para crear y editar) #}
+        <form method="POST" action="" id="terceros-form"
             data-paises-url="{% url 'terceros:api_buscar_paises' %}"
             data-divisiones-url ="{% url 'terceros:api_buscar_divisiones' %}"
             data-ciudades-url ="{% url 'terceros:api_buscar_ciudades' %}"
@@ -30,17 +31,6 @@
             </div>
 
             <div class="form-container">
-                <!-- Mensajes -->
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert {% if message.tags == 'success' %}alert-success {% else %}alert-danger{% endif %} alert-dismissible fade show mb-2" role="alert">
-                            <i class="fas {% if message.tags == 'success' %}fa-circle{% else %}fa-exclamation-triangle{% endif %} me-2"></i>
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-
                 <!-- Sección de Identificación -->
                 <h5 class="form-subheading mb-1">Identificación</h5>
                 <hr class="my-1">
@@ -138,12 +128,23 @@
                 <!-- Botones de Acción -->
                 <hr class="my-2">
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-redo me-2"></i>Limpiar Formulario
-                    </a>
-                    <button type="submit" class="btn btn-primary" id="submit-button">
-                        <i class="fas fa-save me-2"></i>Guardar Tercero
-                    </button>
+                    {% if form.instance.pk %}
+                        {# --- Botones para la VISTA DE EDICIÓN --- #}
+                        <a href="{% url 'terceros:Lista_terceros' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary" id="submit-button">
+                            <i class="fas fa-save me-2"></i>Guardar Cambios
+                        </button>
+                    {% else %}
+                        {# --- Botones para la VISTA DE CREACIÓN --- #}
+                        <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-redo me-2"></i>Limpiar Formulario
+                        </a>
+                        <button type="submit" class="btn btn-primary" id="submit-button">
+                            <i class="fas fa-save me-2"></i>Guardar Tercero
+                        </button>
+                    {% endif %}
                 </div>
             </div>
         </form>

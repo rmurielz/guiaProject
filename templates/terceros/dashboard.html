@@ -1,57 +1,222 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard - GUIA ERP{% endblock %}
 
 {% block content %}
-<!-- Page Header -->
-<div class="page-header" style="background: none; border: none; padding-left: 0; padding-top: 0;">
-    <h1>Dashboard</h1>
-    <p>Resumen general del sistema y accesos directos.</p>
-</div>
-
-<!-- Fila de Tarjetas de Resumen -->
-<div class="row g-4 mb-4">
-    <!-- Tarjeta Total Terceros -->
-    <div class="col-lg-4 col-md-6">
-        <div class="summary-card">
-            <div class="card-icon" style="background-color: #3b82f6;">
-                <i class="fas fa-users"></i>
-            </div>
-            <div class="card-content">
-                <div class="card-value">{{ total_terceros }}</div>
-                <div class="card-label">Terceros Registrados</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tarjeta Placeholder para Ventas -->
-    <div class="col-lg-4 col-md-6">
-        <div class="summary-card">
-            <div class="card-icon" style="background-color: #10b981;">
-                <i class="fas fa-file-invoice-dollar"></i>
-            </div>
-            <div class="card-content">
-                <div class="card-value">0</div>
-                <div class="card-label">Ventas del Mes</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tarjeta Placeholder para Productos -->
-    <div class="col-lg-4 col-md-6">
-        <div class="summary-card">
-            <div class="card-icon" style="background-color: #f97316;">
-                <i class="fas fa-box-open"></i>
-            </div>
-            <div class="card-content">
-                <div class="card-value">0</div>
-                <div class="card-label">Productos en Inventario</div>
-            </div>
+<div class="row g-3 mb-4">
+    <div class="col-12">
+        <div class="page-header">
+            <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+            <p>Bienvenido al sistema ERP GUIA - Resumen ejecutivo</p>
         </div>
     </div>
 </div>
 
-<!-- Aquí se pueden añadir más secciones, como gráficos o tablas de acceso rápido -->
+<!-- Tarjetas de Estadísticas Principales -->
+<div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-users fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-subtitle mb-1 text-muted">Terceros Activos</h6>
+                        <h3 class="card-title mb-0">{{ stats.terceros.total_activos|default:0 }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-archive fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-subtitle mb-1 text-muted">Terceros Inactivos</h6>
+                        <h3 class="card-title mb-0">{{ stats.terceros.total_inactivos|default:0 }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-line fa-2x text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-subtitle mb-1 text-muted">Total Terceros</h6>
+                        <h3 class="card-title mb-0">{{ stats.terceros.total_general|default:0 }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-globe-americas fa-2x text-info"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-subtitle mb-1 text-muted">Países</h6>
+                        <h3 class="card-title mb-0">{{ stats.top_paises|length|default:0 }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos y Análisis -->
+<div class="row g-3 mb-4">
+    <!-- Top Tipos de Terceros -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Tipos de Terceros Más Utilizados
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if stats.top_tipos %}
+                    {% for tipo in stats.top_tipos %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-medium">{{ tipo.nombre }}</span>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-3" style="width: 100px; height: 8px;">
+                                <div class="progress-bar bg-primary" role="progressbar"
+                                     style="width: {% widthratio tipo.total_terceros stats.terceros.total_activos 100 %}%"></div>
+                            </div>
+                            <span class="badge bg-primary">{{ tipo.total_terceros }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No hay datos de tipos disponibles
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Países -->
+    <div class="col-lg-6">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    Distribución Geográfica
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if stats.top_paises %}
+                    {% for pais in stats.top_paises %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-medium">{{ pais.ciudad__division__pais__nombre }}</span>
+                        <div class="d-flex align-items-center">
+                            <div class="progress me-3" style="width: 100px; height: 8px;">
+                                <div class="progress-bar bg-success" role="progressbar"
+                                     style="width: {% widthratio pais.total stats.terceros.total_activos 100 %}%"></div>
+                            </div>
+                            <span class="badge bg-success">{{ pais.total }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No hay datos geográficos disponibles
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Acciones Rápidas -->
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt me-2"></i>
+                    Acciones Rápidas
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'terceros:crear_tercero' %}" class="btn btn-primary w-100 py-3">
+                            <i class="fas fa-user-plus fa-2x d-block mb-2"></i>
+                            <strong>Crear Tercero</strong>
+                            <br><small>Registrar nuevo cliente/proveedor</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="{% url 'terceros:Lista_terceros' %}" class="btn btn-outline-primary w-100 py-3">
+                            <i class="fas fa-list fa-2x d-block mb-2"></i>
+                            <strong>Ver Terceros</strong>
+                            <br><small>Consultar lista completa</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="#" class="btn btn-outline-secondary w-100 py-3">
+                            <i class="fas fa-box-open fa-2x d-block mb-2"></i>
+                            <strong>Inventario</strong>
+                            <br><small>Gestionar productos</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <a href="#" class="btn btn-outline-secondary w-100 py-3">
+                            <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
+                            <strong>Reportes</strong>
+                            <br><small>Análisis y estadísticas</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información del Cache (solo para desarrollo) -->
+{% if user.is_staff and debug %}
+<div class="row g-3 mt-2">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent">
+                <h6 class="card-title mb-0 text-muted">
+                    <i class="fas fa-database me-2"></i>
+                    Info de Cache (Solo Staff)
+                </h6>
+            </div>
+            <div class="card-body">
+                <small class="text-muted">
+                    Última actualización: {{ stats.ultima_actualizacion|date:"d/m/Y H:i:s" }}
+                    <br>
+                    <a href="{% url 'terceros:api_invalidar_cache' %}" class="btn btn-sm btn-outline-warning mt-2">
+                        <i class="fas fa-sync me-1"></i>Invalidar Cache
+                    </a>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

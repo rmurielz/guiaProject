@@ -111,6 +111,8 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
     )
     nroid = models.CharField(
         max_length=30,
+        # Esta es la restricción correcta para asegurar unicidad a nivel de BD
+        unique=True,
         verbose_name=_('Número ID'),
         blank=False
     )
@@ -175,8 +177,6 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
         verbose_name = _('Tercero')
         verbose_name_plural = _('Terceros')
         ordering = ['nombre']
-        # Asegura que no se pueda registrar dos veces el mismo número de ID con el mismo tipo
-        unique_together = (('tipo_identificacion', 'nroid'),)
 
     def __str__(self):
         """Representación en texto del objeto."""
