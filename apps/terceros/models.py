@@ -92,6 +92,12 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
     """
 
     # --- Campos del Modelo ---
+    empresa = models.ForeignKey(
+        'empresa.Empresa',
+        on_delete=models.PROTECT,
+        related_name='terceros',
+        verbose_name=_('Empresa')
+    )
 
     # 1. Clasificación e Identificación
     tipo_tercero = models.ForeignKey(
@@ -111,8 +117,7 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
     )
     nroid = models.CharField(
         max_length=30,
-        # Esta es la restricción correcta para asegurar unicidad a nivel de BD
-        unique=True,
+        # La unicidad se define en `unique_together` para que sea por empresa
         verbose_name=_('Número ID'),
         blank=False
     )
@@ -177,6 +182,7 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
         verbose_name = _('Tercero')
         verbose_name_plural = _('Terceros')
         ordering = ['nombre']
+        unique_together = ('empresa', 'nroid')
 
     def __str__(self):
         """Representación en texto del objeto."""
@@ -184,17 +190,18 @@ class Tercero(TimeStampedModel, SoftDeleteModel):
 
     def save(self, *args, **kwargs):
         """Sobrescribe el método save para normalizar datos antes de guardar."""
-        # Capitaliza los campos de texto relevantes para un formato consistente
-        fields_to_capitalize = [
-            'nombre', 'nombre_comercial', 'direccion', 'contacto', 'cargo'
-        ]
-        for field_name in fields_to_capitalize:
-            value = getattr(self, field_name)
-            if isinstance(value, str):
-                setattr(self, field_name, value.title())
+        # Normaliza campos de texto a formato Título y quita espacios extra.
+        for field_name in ['nombre', 'nombre_comercial', 'direccion', 'contacto', 'cargo']:
+            value = getattr(self, field_name, None)
+            if value:
+                setattr(self, field_name, value.strip().title())
 
-        # Convierte el email a minúsculas
+        # Convierte el email a minúsculas y quita espacios
         if self.email:
-            self.email = self.email.lower()
+            self.email = self.email.lower().strip()
+
+        # Normaliza el NIF/ID quitando espacios
+        if self.nroid:
+            self.nroid = self.nroid.strip()
 
         super().save(*args, **kwargs)

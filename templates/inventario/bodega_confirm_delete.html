@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar Eliminación de Bodega{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-danger">
+    <div class="card-header bg-danger text-white">
+        <h4 class="mb-0">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Confirmar Eliminación
+        </h4>
+    </div>
+    <div class="card-body">
+        <p class="fs-5">¿Estás seguro de que deseas eliminar la bodega <strong>"{{ object.nombre }}"</strong>?</p>
+        <p class="text-muted">Esta acción marcará la bodega como inactiva, pero no la borrará permanentemente de la base de datos.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a href="{% url 'inventario:lista_bodegas' %}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

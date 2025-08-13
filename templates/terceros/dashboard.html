@@ -13,6 +13,7 @@
     </div>
 </div>
 
+{% if stats %}
 <!-- Tarjetas de Estadísticas Principales -->
 <div class="row g-3 mb-4">
     <div class="col-lg-3 col-md-6">
@@ -182,7 +183,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <a href="#" class="btn btn-outline-secondary w-100 py-3">
+                        <a href="{% url 'inventario:lista_bodegas' %}" class="btn btn-outline-primary w-100 py-3">
                             <i class="fas fa-box-open fa-2x d-block mb-2"></i>
                             <strong>Inventario</strong>
                             <br><small>Gestionar productos</small>
@@ -222,6 +223,16 @@
                 </small>
             </div>
         </div>
+    </div>
+</div>
+{% endif %}
+{% else %}
+<div class="card shadow-sm text-center" style="padding: 5rem 2rem;">
+    <div class="card-body">
+        <i class="fas fa-info-circle fa-3x text-primary mb-3"></i>
+        <h2 class="card-title">Bienvenido a GUIA ERP</h2>
+        <p class="lead text-muted">Para comenzar, por favor, selecciona una empresa desde el menú superior.</p>
+        <p>Si aún no has creado ninguna empresa, puedes <a href="{% url 'empresa:crear_empresa' %}">crear una ahora</a>.</p>
     </div>
 </div>
 {% endif %}

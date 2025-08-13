@@ -3,20 +3,12 @@
 
 {% block title %}Creación de Terceros{% endblock %}
 {% block extra_css %}
-{# AÑADIMOS LA HOJA DE ESTILOS BASE DE TOM-SELECT. ESTA ES LA CLAVE. #}
-<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <!-- Page Header -->
-
-        {# Dejar action="" es una mejor práctica, ya que el formulario se enviará a la URL actual (funciona para crear y editar) #}
-        <form method="POST" action="" id="terceros-form"
-            data-paises-url="{% url 'terceros:api_buscar_paises' %}"
-            data-divisiones-url ="{% url 'terceros:api_buscar_divisiones' %}"
-            data-ciudades-url ="{% url 'terceros:api_buscar_ciudades' %}"
-            data-verificar-url ="{% url 'terceros:api_verificar_tercero' %}"
-            novalidate>
+        <form method="POST" novalidate>
             {% csrf_token %}
 
             <div style="display:none;">
@@ -86,16 +78,16 @@
 
                 <div class="row g-2 mt-1">
                     <div class="col-md-4">
-                        <label for="pais-select" class="form-label">País</label>
-                        <select id="pais-select" placeholder="Escriba para buscar un país..."></select>
+                        <label for="id_pais" class="form-label">País</label>
+                        <select id="id_pais" placeholder="Escriba para buscar un país..."></select>
                     </div>
                     <div class="col-md-4">
-                        <label for="division-select" class="form-label">Departamento / Estado / Provincia</label>
-                        <select id="division-select" placeholder="Primero seleccione un país..." disabled></select>
+                        <label for="id_division" class="form-label">Departamento / Estado / Provincia</label>
+                        <select id="id_division" placeholder="Primero seleccione un país..." disabled></select>
                     </div>
                     <div class="col-md-4">
-                        <label for="ciudad-select" class="form-label">Ciudad</label>
-                        <select id="ciudad-select" name="{{ form.ciudad_geoname_id.name }}" placeholder="Primero seleccione una división..." disabled></select>
+                        <label for="id_ciudad" class="form-label">Ciudad</label>
+                        <select id="id_ciudad" placeholder="Primero seleccione una división..." disabled></select>
                     </div>
                 </div>
 
@@ -148,10 +140,22 @@
                 </div>
             </div>
         </form>
+
+{{ ubicacion_inicial|json_script:"ubicacion-inicial-data" }}
 {% endblock %}
 
 {% block extra_js %}
-    {# Añadinmos el JS de Tom Select y luego nuestro script personalizado #}
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-    <script src="{% static 'js/terceros/tercero_form_search.js' %}?v={% now 'U' %}" defer></script>
+    <script>
+        // Pasamos las URLs y datos iniciales de Django al script estático
+        const LOCATION_SELECTOR_CONFIG = {
+            urls: {
+                paises: "{% url 'terceros:api_buscar_paises' %}",
+                divisiones: "{% url 'terceros:api_buscar_divisiones' %}",
+                ciudades: "{% url 'terceros:api_buscar_ciudades' %}"
+            },
+            ubicacion_inicial: JSON.parse(document.getElementById('ubicacion-inicial-data').textContent || 'null')
+        };
+    </script>
+    <script src="{% static 'js/location-selector.js' %}"></script>
 {% endblock %}

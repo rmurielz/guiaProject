@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="feat: Campos de ubicación geográfica readonly">
-      <change beforePath="$PROJECT_DIR$/apps/terceros/tests.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/tests.py" afterDir="false" />
+    <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="feat: Implementación Tests y optimización queries N+1">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/migrations/0002_tercero_activo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/terceros/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/terceros/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia_erp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/guia_erp/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/guia_erp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/guia_erp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/terceros/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/terceros/landing_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/landing_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/terceros/tercero_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/tercero_form.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +37,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -63,7 +80,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/proyecto/Guia/templates/terceros&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/proyecto/Guia&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -146,7 +163,10 @@
       <workItem from="1754757794326" duration="10171000" />
       <workItem from="1754785729091" duration="1862000" />
       <workItem from="1754843667466" duration="2163000" />
-      <workItem from="1754857099973" duration="3036000" />
+      <workItem from="1754857099973" duration="9040000" />
+      <workItem from="1754924242698" duration="3249000" />
+      <workItem from="1754930900018" duration="12434000" />
+      <workItem from="1755014457279" duration="20171000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Campos de ubicación geográfica readonly">
       <option name="closed" value="true" />
@@ -156,7 +176,23 @@
       <option name="project" value="LOCAL" />
       <updated>1754697431978</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="feat: Implementación Tests y optimización queries N+1">
+      <option name="closed" value="true" />
+      <created>1754860830127</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1754860830127</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: Implementación Tests y optimización queries N+1">
+      <option name="closed" value="true" />
+      <created>1754860867119</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754860867119</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,6 +223,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: Campos de ubicación geográfica readonly" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Campos de ubicación geográfica readonly" />
+    <MESSAGE value="feat: Implementación Tests y optimización queries N+1" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Implementación Tests y optimización queries N+1" />
   </component>
 </project>

@@ -36,17 +36,38 @@
             </a>
 
             <div class="nav-category">Módulos</div>
-            <a href="{% url 'terceros:Lista_terceros' %}" class="{% if request.resolver_match.app_name == 'terceros' %}active{% endif %}">
+            <a href="{% url 'terceros:Lista_terceros' %}" class="{% if request.resolver_match.app_name == 'terceros' and 'crear' not in request.resolver_match.url_name and 'editar' not in request.resolver_match.url_name %}active{% endif %}">
                 <i class="fas fa-users"></i>
                 <span>Terceros</span>
             </a>
-            <a href="#"><i class="fas fa-box-open"></i> <span>Inventario</span></a>
+            <a href="{% url 'inventario:lista_bodegas' %}" class="{% if request.resolver_match.app_name == 'inventario' and 'crear' not in request.resolver_match.url_name and 'editar' not in request.resolver_match.url_name %}active{% endif %}"><i class="fas fa-box-open"></i> <span>Inventario</span></a>
             <a href="#"><i class="fas fa-shopping-cart"></i> <span>Compras</span></a>
             <a href="#"><i class="fas fa-file-invoice-dollar"></i> <span>Ventas</span></a>
             <a href="#"><i class="fas fa-chart-bar"></i> <span>Reportes</span></a>
 
             <div class="nav-category">Sistema</div>
-            <a href="#"><i class="fas fa-cog"></i> <span>Configuración</span></a>
+            <a class="nav-link-collapse {% if request.resolver_match.url_name in 'crear_empresa,crear_tercero,crear_bodega' %}active{% endif %}" data-bs-toggle="collapse" href="#collapseConfig" role="button" aria-expanded="false" aria-controls="collapseConfig">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+                <i class="fas fa-chevron-down ms-auto"></i>
+            </a>
+            <div class="collapse" id="collapseConfig">
+                <div class="nav-collapse-links">
+                    {% if perms.empresa.add_empresa %}
+                        <a href="{% url 'empresa:crear_empresa' %}">Crear Empresa</a>
+                    {% endif %}
+                    {% if perms.terceros.add_tercero %}
+                        <a href="{% url 'terceros:crear_tercero' %}">Crear Tercero</a>
+                    {% endif %}
+                    {% if perms.usuarios.add_user %}
+                        <a href="{% url 'usuarios:crear_usuario' %}">Crear Usuario</a>
+                    {% endif %}
+                    {% if perms.inventario.add_bodega %}
+                        <a href="{% url 'inventario:crear_bodega' %}">Crear Bodega</a>
+                    {% endif %}
+                    {# Aquí irán los futuros enlaces de configuración #}
+                </div>
+            </div>
         </nav>
     </div>
 
@@ -60,9 +81,41 @@
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-            <div class="user-profile">
-                <span>Bienvenido, <strong>Ricardo</strong></span>
-                <img src="https://placehold.co/100x100/e9ecef/343a40?text=R" alt="User">
+            <div class="d-flex align-items-center gap-3">
+                <!-- Selector de Empresa -->
+                {% if request.user.is_authenticated and empresas_disponibles %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="empresaSelector" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-building me-2"></i>
+                        {% if request.session.empresa_nombre %}
+                            {{ request.session.empresa_nombre }}
+                        {% else %}
+                            Seleccionar Empresa
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="empresaSelector">
+                        {% for empresa in empresas_disponibles %}
+                            <li><a class="dropdown-item" href="{% url 'empresa:seleccionar_empresa' empresa.id %}">{{ empresa.nombre }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="https://placehold.co/100x100/e9ecef/343a40?text={{ user.username.0|upper }}" alt="" width="32" height="32" class="rounded-circle me-2">
+                        <strong>{{ user.get_full_name|default:user.username }}</strong>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow dropdown-menu-end" aria-labelledby="dropdownUser">
+                        <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </header>
 

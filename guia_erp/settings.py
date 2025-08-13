@@ -50,18 +50,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.core',
     'apps.terceros.apps.TercerosConfig',
+    'apps.inventario.apps.InventarioConfig',
+    'apps.empresa.apps.EmpresaConfig',
+    'apps.usuarios.apps.UsuariosConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django_ratelimit.middleware.RatelimitMiddleware', # ¡IMPORTANTE! Se elimina de aquí.
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.empresa.middleware.EmpresaSeleccionadaMiddleware',
 ]
 
 ROOT_URLCONF = 'guia_erp.urls'
@@ -77,6 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.empresa.context_processors.empresas_context',
             ],
         },
     },
@@ -196,6 +201,23 @@ RATELIMIT_USE_CACHE = 'default'
 # La práctica estándar es activar `ratelimit` solo en producción (cuando DEBUG=False)
 # para evitar problemas con cachés de desarrollo y simplificar el entorno local.
 if not DEBUG and RATELIMIT_ENABLE:
+    # Añadir 'django_ratelimit' a las aplicaciones instaladas
     INSTALLED_APPS.append('django_ratelimit')
     # Insertar el middleware en una posición adecuada. Después de CommonMiddleware es una buena opción.
     MIDDLEWARE.insert(3, 'django_ratelimit.middleware.RatelimitMiddleware')
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'
+
+# --- Tiempos de Expiración de Cache Centralizados ---
+CACHE_TIMEOUTS = {
+    'GEONAMES_PAISES': 86400,      # 24 horas
+    'GEONAMES_DIVISIONES': 21600,  # 6 horas
+    'GEONAMES_CIUDADES': 7200,     # 2 horas
+    'FORM_CHOICES': 3600,          # 1 hora
+    'DASHBOARD_STATS': 300,        # 5 minutos
+}
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'

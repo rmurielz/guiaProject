@@ -1,5 +1,6 @@
 # C:/proyecto/Guia/terceros/forms.py
 from django import forms
+from django.conf import settings
 from django.core.cache import cache
 from .models import Tercero, Pais, Division, Ciudad, TipoTercero, TipoIdentificacion
 
@@ -52,18 +53,20 @@ class TerceroForm(forms.ModelForm):
         para evitar queries N+1 cuando se renderizan múltiples formularios
         o cuando el formulario se muestra varias veces.
         """
+        # Extraemos la empresa antes de llamar al padre para usarla en las validaciones
+        self.empresa = kwargs.pop('empresa', None)
         super().__init__(*args, **kwargs)
 
         # Cache de 1 hora para los tipos (cambian raramente)
         tipos_tercero = cache.get('tipos_tercero_choices')
         if tipos_tercero is None:
             tipos_tercero = list(TipoTercero.objects.all().order_by('nombre').values_list('id', 'nombre'))
-            cache.set('tipos_tercero_choices', tipos_tercero, 3600)
+            cache.set('tipos_tercero_choices', tipos_tercero, settings.CACHE_TIMEOUTS['FORM_CHOICES'])
 
         tipos_identificacion = cache.get('tipos_identificacion_choices')
         if tipos_identificacion is None:
             tipos_identificacion = list(TipoIdentificacion.objects.all().order_by('nombre').values_list('id', 'nombre'))
-            cache.set('tipos_identificacion_choices', tipos_identificacion, 3600)
+            cache.set('tipos_identificacion_choices', tipos_identificacion, settings.CACHE_TIMEOUTS['FORM_CHOICES'])
 
         # Aplicar las opciones cacheadas
         self.fields['tipo_tercero'].choices = [('', '---------')] + tipos_tercero
@@ -76,10 +79,13 @@ class TerceroForm(forms.ModelForm):
         """
         nroid = self.cleaned_data.get('nroid')
 
-        if nroid:
+        if nroid and self.empresa:
             # Optimización: usamos only() para traer solo el campo que necesitamos validar
-            query = Tercero.objects.filter(nroid=nroid).exclude(pk=self.instance.pk)
+            query = Tercero.objects.filter(empresa=self.empresa, nroid=nroid)
 
+            # Si estamos editando, excluimos el propio objeto de la validación
+            if self.instance and self.instance.pk:
+                query = query.exclude(pk=self.instance.pk)
             # Solo verificamos la existencia, no necesitamos todos los campos
             if query.only('id').exists():
                 raise forms.ValidationError("Ya existe un tercero registrado con este número de documento.")
@@ -124,18 +130,11 @@ class TerceroForm(forms.ModelForm):
                     }
                 )
 
-                # Invalidar cache del dashboard si se crearon nuevos registros geográficos
-                if pais_created or division_created or ciudad_created:
-                    cache.delete('dashboard_stats')
-
             # 2. Guardar la instancia del Tercero
             tercero_instance = super().save(commit=False)
             tercero_instance.ciudad = ciudad
 
             if commit:
                 tercero_instance.save()
-
-                # Invalidar caches relevantes después de guardar
-                cache.delete('dashboard_stats')  # El dashboard incluye estadísticas de terceros
 
             return tercero_instance
