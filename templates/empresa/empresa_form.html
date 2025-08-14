@@ -106,7 +106,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js" defer></script>
 <script>
     // Pasamos las URLs y datos iniciales de Django al script estático
     const LOCATION_SELECTOR_CONFIG = {
@@ -118,5 +118,5 @@
         ubicacion_inicial: JSON.parse(document.getElementById('ubicacion-inicial-data').textContent || 'null')
     };
 </script>
-<script src="{% static 'js/location-selector.js' %}"></script>
+<script src="{% static 'js/location-selector.js' %}" defer></script>
 {% endblock %}

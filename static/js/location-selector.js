@@ -45,10 +45,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     fetchUrl += `&geoname_id=${options.parentField.getValue()}`;
                 }
                 fetch(fetchUrl)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error de red: ${response.status} - ${response.statusText} para URL: ${response.url}');
+                        }
+                        return response.json();
+                    })
                     .then(json => callback(json))
-                    .catch(() => callback());
-            },
+                    .catch((error) => {
+                        console.error('Error al cargar datos de ubicación:', error);
+                        this.clearOptions();
+                        this.addOption({id:'', nombre: 'Error al cargar datos'});
+                        this.disable();
+                        callback([]);
+                    });
+                    },
             onChange: function() {
                 // Evita que el dropdown se cierre inmediatamente después de seleccionar
                 // una opción que fue cargada dinámicamente.
