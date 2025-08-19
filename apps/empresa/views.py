@@ -2,7 +2,7 @@ import logging
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from django.contrib import messages
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 from django.views import View
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -68,3 +68,11 @@ class SeleccionarEmpresaView(LoginRequiredMixin, View):
             messages.error(request, "La empresa seleccionada no es válida o no tienes acceso a ella.")
 
         return redirect('dashboard')
+
+
+class SeleccionarEmpresaInicialView(LoginRequiredMixin, TemplateView):
+    """
+    Página dedicada para que el usuario elija una empresa al iniciar sesión
+    si tiene acceso a más de una y ninguna está activa en la sesión.
+    """
+    template_name = 'empresa/seleccionar_empresa_inicial.html'

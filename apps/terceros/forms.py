@@ -2,22 +2,11 @@
 from django import forms
 from django.conf import settings
 from django.core.cache import cache
-from .models import Tercero, Pais, Division, Ciudad, TipoTercero, TipoIdentificacion
+from .models import Tercero, TipoTercero, TipoIdentificacion
+from apps.core.forms import UbicacionFormMixin
 
 
-class TerceroForm(forms.ModelForm):
-    # Campos adicionales para recibir los datos de la ubicación desde el frontend.
-    pais_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    pais_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-    pais_codigo_iso = forms.CharField(required=False, widget=forms.HiddenInput())
-
-    division_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    division_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-    division_codigo_iso = forms.CharField(required=False, widget=forms.HiddenInput())
-
-    ciudad_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    ciudad_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-
+class TerceroForm(UbicacionFormMixin, forms.ModelForm):
     class Meta:
         model = Tercero
         fields = [
@@ -94,47 +83,15 @@ class TerceroForm(forms.ModelForm):
 
     def save(self, commit=True):
         """
-        Método save optimizado con transacciones y updates específicos.
+        Sobrescribimos save para integrar la lógica de guardado de ubicación del Mixin.
         """
-        from django.db import transaction
+        # Primero, guardamos la instancia del Tercero sin commit para obtener un objeto.
+        tercero_instance = super().save(commit=False)
 
-        with transaction.atomic():
-            # 1. Obtener o crear la ubicación geográfica
-            ciudad = None
-            ciudad_geoname_id = self.cleaned_data.get('ciudad_geoname_id')
+        # Usamos el metodo del mixin para manejar la ubicación
+        tercero_instance = self.save_ubicacion(tercero_instance)
 
-            if ciudad_geoname_id:
-                # Optimización: usar update_or_create de forma eficiente
-                pais, pais_created = Pais.objects.update_or_create(
-                    codigo_iso=self.cleaned_data.get('pais_codigo_iso'),
-                    defaults={
-                        'nombre': self.cleaned_data.get('pais_nombre'),
-                        'geoname_id': self.cleaned_data.get('pais_geoname_id')
-                    }
-                )
-
-                division, division_created = Division.objects.update_or_create(
-                    codigo_iso=self.cleaned_data.get('division_codigo_iso'),
-                    defaults={
-                        'nombre': self.cleaned_data.get('division_nombre'),
-                        'geoname_id': self.cleaned_data.get('division_geoname_id'),
-                        'pais': pais
-                    }
-                )
-
-                ciudad, ciudad_created = Ciudad.objects.get_or_create(
-                    geoname_id=ciudad_geoname_id,
-                    defaults={
-                        'nombre': self.cleaned_data.get('ciudad_nombre'),
-                        'division': division
-                    }
-                )
-
-            # 2. Guardar la instancia del Tercero
-            tercero_instance = super().save(commit=False)
-            tercero_instance.ciudad = ciudad
-
-            if commit:
-                tercero_instance.save()
-
-            return tercero_instance
+        if commit:
+            # El metodo save() del modelo se encargará de la normalización de campos
+            tercero_instance.save()
+        return tercero_instance

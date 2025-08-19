@@ -1,27 +1,15 @@
 from django import forms
-from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from .models import Bodega
-from apps.terceros.models import Pais, Division, Ciudad, Tercero
+from apps.terceros.models import Tercero
+from apps.core.forms import UbicacionFormMixin
 
 
-class BodegaForm(forms.ModelForm):
+class BodegaForm(UbicacionFormMixin, forms.ModelForm):
     """
-    Formulario para la creación y edición de Bodegas, con la capacidad
-    de crear la ubicación geográfica sobre la marcha.
+    Formulario para la creación y edición de Bodegas, utilizando el mixin
+    de ubicación para una lógica centralizada y limpia.
     """
-    # Campos ocultos para recibir los datos de la ubicación desde el frontend.
-    pais_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    pais_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-    pais_codigo_iso = forms.CharField(required=False, widget=forms.HiddenInput())
-
-    division_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    division_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-    division_codigo_iso = forms.CharField(required=False, widget=forms.HiddenInput())
-
-    ciudad_geoname_id = forms.IntegerField(required=False, widget=forms.HiddenInput())
-    ciudad_nombre = forms.CharField(required=False, widget=forms.HiddenInput())
-
     class Meta:
         model = Bodega
         fields = ['nombre', 'direccion', 'responsable']
@@ -31,18 +19,18 @@ class BodegaForm(forms.ModelForm):
             'responsable': forms.Select(attrs={'class': 'form-select'}),
         }
 
-    def __init__(self, *args, empresa_id=None, **kwargs):
+    def __init__(self, *args, **kwargs):
+        # Extraemos la empresa antes de llamar al padre para usarla en las validaciones
+        self.empresa = kwargs.pop('empresa', None)
         super().__init__(*args, **kwargs)
 
         # Filtrar el queryset de responsables para mostrar solo los de la empresa activa.
-        if empresa_id:
+        if self.empresa:
             self.fields['responsable'].queryset = Tercero.objects.filter(
-                activo=True, empresa_id=empresa_id
+                activo=True, empresa=self.empresa
             ).order_by('nombre')
         else:
             self.fields['responsable'].queryset = Tercero.objects.none()
-
-        self.fields['responsable'].required = False
 
     def clean_nombre(self):
         """
@@ -65,7 +53,8 @@ class BodegaForm(forms.ModelForm):
     def clean(self):
         """Validación para asegurar que se ha seleccionado una ciudad."""
         cleaned_data = super().clean()
-        if not cleaned_data.get('ciudad_geoname_id'):
+        # Solo validamos en la creación, no en la edición
+        if not self.instance.pk and not cleaned_data.get('ciudad_geoname_id'):
             raise forms.ValidationError(
                 _("La selección de una ciudad es obligatoria para la bodega."),
                 code='ciudad_requerida'
@@ -73,27 +62,9 @@ class BodegaForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        """
-        Guarda la instancia de la Bodega, creando la ubicación si es necesario.
-        """
-        with transaction.atomic():
-            # 1. Obtener o crear la ubicación geográfica
-            pais, _ = Pais.objects.update_or_create(
-                codigo_iso=self.cleaned_data.get('pais_codigo_iso'),
-                defaults={'nombre': self.cleaned_data.get('pais_nombre'), 'geoname_id': self.cleaned_data.get('pais_geoname_id')}
-            )
-            division, _ = Division.objects.update_or_create(
-                codigo_iso=self.cleaned_data.get('division_codigo_iso'),
-                defaults={'nombre': self.cleaned_data.get('division_nombre'), 'geoname_id': self.cleaned_data.get('division_geoname_id'), 'pais': pais}
-            )
-            ciudad, _ = Ciudad.objects.get_or_create(
-                geoname_id=self.cleaned_data.get('ciudad_geoname_id'),
-                defaults={'nombre': self.cleaned_data.get('ciudad_nombre'), 'division': division}
-            )
-
-            # 2. Asignar la ciudad y guardar la Bodega
-            bodega_instance = super().save(commit=False)
-            bodega_instance.ciudad = ciudad
-            if commit:
-                bodega_instance.save()
-            return bodega_instance
+        bodega_instance = super().save(commit=False)
+        bodega_instance.empresa = self.empresa # Asignamos la empresa activa
+        bodega_instance = self.save_ubicacion(bodega_instance)
+        if commit:
+            bodega_instance.save()
+        return bodega_instance

@@ -6,19 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="76587fc7-250c-465c-b51e-facd80f471bd" name="Changes" comment="feat: Implementación Tests y optimización queries N+1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/empresa/middleware.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/empresa/middleware.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/empresa/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/empresa/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/empresa/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/empresa/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/inventario/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/inventario/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/terceros/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/migrations/0002_tercero_activo.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/terceros/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/terceros/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guia_erp/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/guia_erp/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guia_erp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/guia_erp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/usuarios/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/usuarios/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/usuarios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/usuarios/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/usuarios/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/usuarios/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/usuarios/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/apps/usuarios/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/terceros/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/terceros/landing_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/landing_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/terceros/tercero_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/terceros/tercero_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/usuarios/usuario_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/usuarios/usuario_form.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,8 +100,9 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\proyecto\Guia\templates\terceros" />
+      <recent name="C:\Users\rmuri\Desktop" />
       <recent name="C:\proyecto\Guia\apps\core" />
+      <recent name="C:\proyecto\Guia\templates\terceros" />
       <recent name="C:\proyecto\Guia\apps" />
     </key>
   </component>
@@ -137,8 +136,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.439" />
-        <option value="bundled-python-sdk-b3ae9b5d7125-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.439" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.515" />
+        <option value="bundled-python-sdk-7e47963ff851-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.515" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +166,12 @@
       <workItem from="1754924242698" duration="3249000" />
       <workItem from="1754930900018" duration="12434000" />
       <workItem from="1755014457279" duration="20171000" />
+      <workItem from="1755205586180" duration="755000" />
+      <workItem from="1755206758157" duration="6246000" />
+      <workItem from="1755274041857" duration="5830000" />
+      <workItem from="1755293316871" duration="2430000" />
+      <workItem from="1755296061331" duration="406000" />
+      <workItem from="1755299092177" duration="2845000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Campos de ubicación geográfica readonly">
       <option name="closed" value="true" />

@@ -18,6 +18,13 @@
 
 <!-- 2. DESPUÉS, cargamos nuestra hoja de estilos principal. Al ser la última, sus reglas tienen prioridad. -->
 <link rel="stylesheet" href="{% static 'css/main.css' %}?v={% now 'U' %}">
+
+<style>
+    /* Solución para el scroll de la barra lateral */
+    .sidebar {
+        overflow-y: auto; /* Permite el scroll vertical solo cuando es necesario */
+    }
+</style>
 </head>
 <body>
     <!-- Overlay para cerrar el menú móvil -->
@@ -59,8 +66,12 @@
                     {% if perms.terceros.add_tercero %}
                         <a href="{% url 'terceros:crear_tercero' %}">Crear Tercero</a>
                     {% endif %}
-                    {% if perms.usuarios.add_user %}
-                        <a href="{% url 'usuarios:crear_usuario' %}">Crear Usuario</a>
+                    {# Lógica para mostrar el enlace de creación de usuario correcto #}
+                    {% if user.is_superuser and empresas_disponibles %}
+                        <a href="{% url 'usuarios:crear_usuario_global' %}">Crear Usuario (Global)</a>
+                    {% elif user.perfil.es_admin_empresa %}
+                        {# Este es el enlace para el admin de empresa #}
+                        <a href="{% url 'usuarios:crear_usuario_empresa' %}">Crear Usuario</a>
                     {% endif %}
                     {% if perms.inventario.add_bodega %}
                         <a href="{% url 'inventario:crear_bodega' %}">Crear Bodega</a>
@@ -95,7 +106,14 @@
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="empresaSelector">
                         {% for empresa in empresas_disponibles %}
-                            <li><a class="dropdown-item" href="{% url 'empresa:seleccionar_empresa' empresa.id %}">{{ empresa.nombre }}</a></li>
+                            <li>
+                                <form action="{% url 'empresa:seleccionar_empresa' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="empresa_id" value="{{ empresa.id }}">
+                                    <button type="submit" class="dropdown-item {% if empresa.id == request.session.empresa_id %}active{% endif %}">
+                                        {{ empresa.nombre }}</button>
+                                </form>
+                            </li>
                         {% endfor %}
                     </ul>
                 </div>
